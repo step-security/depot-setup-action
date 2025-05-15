@@ -6,12 +6,7 @@ on:
       tag:
         description: "Tag for the release"
         required: true
-      script:
-        description: "Specify the build script to run"
-        required: false
-        type: string
-        default: "pnpm run build"
-
+        
 permissions:
   contents: read
 
@@ -25,4 +20,3 @@ jobs:
     uses: step-security/reusable-workflows/.github/workflows/actions_release.yaml@v1
     with:
       tag: "${{ github.event.inputs.tag }}"
-      script: "${{ github.event.inputs.script }}"
