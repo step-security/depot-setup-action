@@ -66,8 +66,7 @@ var require_command = __commonJS({
   "node_modules/@actions/core/lib/command.js"(exports2) {
     "use strict";
     var __createBinding = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
-      if (k2 === void 0)
-        k2 = k;
+      if (k2 === void 0) k2 = k;
       var desc = Object.getOwnPropertyDescriptor(m, k);
       if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
         desc = { enumerable: true, get: function() {
@@ -76,8 +75,7 @@ var require_command = __commonJS({
       }
       Object.defineProperty(o, k2, desc);
     } : function(o, m, k, k2) {
-      if (k2 === void 0)
-        k2 = k;
+      if (k2 === void 0) k2 = k;
       o[k2] = m[k];
     });
     var __setModuleDefault = exports2 && exports2.__setModuleDefault || (Object.create ? function(o, v) {
@@ -86,13 +84,10 @@ var require_command = __commonJS({
       o["default"] = v;
     });
     var __importStar = exports2 && exports2.__importStar || function(mod) {
-      if (mod && mod.__esModule)
-        return mod;
+      if (mod && mod.__esModule) return mod;
       var result = {};
       if (mod != null) {
-        for (var k in mod)
-          if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k))
-            __createBinding(result, mod, k);
+        for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
       }
       __setModuleDefault(result, mod);
       return result;
@@ -157,8 +152,7 @@ var require_file_command = __commonJS({
   "node_modules/@actions/core/lib/file-command.js"(exports2) {
     "use strict";
     var __createBinding = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
-      if (k2 === void 0)
-        k2 = k;
+      if (k2 === void 0) k2 = k;
       var desc = Object.getOwnPropertyDescriptor(m, k);
       if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
         desc = { enumerable: true, get: function() {
@@ -167,8 +161,7 @@ var require_file_command = __commonJS({
       }
       Object.defineProperty(o, k2, desc);
     } : function(o, m, k, k2) {
-      if (k2 === void 0)
-        k2 = k;
+      if (k2 === void 0) k2 = k;
       o[k2] = m[k];
     });
     var __setModuleDefault = exports2 && exports2.__setModuleDefault || (Object.create ? function(o, v) {
@@ -177,13 +170,10 @@ var require_file_command = __commonJS({
       o["default"] = v;
     });
     var __importStar = exports2 && exports2.__importStar || function(mod) {
-      if (mod && mod.__esModule)
-        return mod;
+      if (mod && mod.__esModule) return mod;
       var result = {};
       if (mod != null) {
-        for (var k in mod)
-          if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k))
-            __createBinding(result, mod, k);
+        for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
       }
       __setModuleDefault(result, mod);
       return result;
@@ -1030,8 +1020,7 @@ var require_util = __commonJS({
         return host.substring(1, idx2);
       }
       const idx = host.indexOf(":");
-      if (idx === -1)
-        return host;
+      if (idx === -1) return host;
       return host.substring(0, idx);
     }
     function getServerName(host) {
@@ -1101,8 +1090,7 @@ var require_util = __commonJS({
       return headerNameLowerCasedRecord[value] || value.toLowerCase();
     }
     function parseHeaders(headers, obj = {}) {
-      if (!Array.isArray(headers))
-        return headers;
+      if (!Array.isArray(headers)) return headers;
       for (let i = 0; i < headers.length; i += 2) {
         const key = headers[i].toString().toLowerCase();
         let val = obj[key];
@@ -1276,8 +1264,7 @@ var require_util = __commonJS({
       return `${val}`;
     }
     function parseRangeHeader(range) {
-      if (range == null || range === "")
-        return { start: 0, end: null, size: null };
+      if (range == null || range === "") return { start: 0, end: null, size: null };
       const m = range ? range.match(/^bytes (\d+)-(\d+)\/(\d+)?$/) : null;
       return m ? {
         start: parseInt(m[1]),
@@ -1936,6 +1923,7 @@ var require_decodeText = __commonJS({
             return decoders.utf8;
           case "latin1":
           case "ascii":
+          // TODO: Make these a separate, strict decoder?
           case "us-ascii":
           case "iso-8859-1":
           case "iso8859-1":
@@ -2635,6 +2623,7 @@ var require_basename = __commonJS({
       for (var i = path2.length - 1; i >= 0; --i) {
         switch (path2.charCodeAt(i)) {
           case 47:
+          // '/'
           case 92:
             path2 = path2.slice(i + 1);
             return path2 === ".." || path2 === "." ? "" : path2;
@@ -3871,7 +3860,21 @@ var require_util2 = __commonJS({
           return referrerOrigin;
         }
         case "strict-origin":
+        // eslint-disable-line
+        /**
+           * 1. If referrerURL is a potentially trustworthy URL and
+           * request’s current URL is not a potentially trustworthy URL,
+           * then return no referrer.
+           * 2. Return referrerOrigin
+          */
         case "no-referrer-when-downgrade":
+        // eslint-disable-line
+        /**
+         * 1. If referrerURL is a potentially trustworthy URL and
+         * request’s current URL is not a potentially trustworthy URL,
+         * then return no referrer.
+         * 2. Return referrerOrigin
+        */
         default:
           return isNonPotentiallyTrustWorthy ? "no-referrer" : referrerOrigin;
       }
@@ -3897,14 +3900,11 @@ var require_util2 = __commonJS({
       if (url2.href === "about:blank" || url2.href === "about:srcdoc") {
         return true;
       }
-      if (url2.protocol === "data:")
-        return true;
-      if (url2.protocol === "file:")
-        return true;
+      if (url2.protocol === "data:") return true;
+      if (url2.protocol === "file:") return true;
       return isOriginPotentiallyTrustworthy(url2.origin);
       function isOriginPotentiallyTrustworthy(origin2) {
-        if (origin2 == null || origin2 === "null")
-          return false;
+        if (origin2 == null || origin2 === "null") return false;
         const originAsURL = new URL(origin2);
         if (originAsURL.protocol === "https:" || originAsURL.protocol === "wss:") {
           return true;
@@ -4875,12 +4875,10 @@ var require_dataURL = __commonJS({
       let lead = 0;
       let trail = str.length - 1;
       if (leading) {
-        for (; lead < str.length && isHTTPWhiteSpace(str[lead]); lead++)
-          ;
+        for (; lead < str.length && isHTTPWhiteSpace(str[lead]); lead++) ;
       }
       if (trailing) {
-        for (; trail > 0 && isHTTPWhiteSpace(str[trail]); trail--)
-          ;
+        for (; trail > 0 && isHTTPWhiteSpace(str[trail]); trail--) ;
       }
       return str.slice(lead, trail + 1);
     }
@@ -4891,12 +4889,10 @@ var require_dataURL = __commonJS({
       let lead = 0;
       let trail = str.length - 1;
       if (leading) {
-        for (; lead < str.length && isASCIIWhitespace(str[lead]); lead++)
-          ;
+        for (; lead < str.length && isASCIIWhitespace(str[lead]); lead++) ;
       }
       if (trailing) {
-        for (; trail > 0 && isASCIIWhitespace(str[trail]); trail--)
-          ;
+        for (; trail > 0 && isASCIIWhitespace(str[trail]); trail--) ;
       }
       return str.slice(lead, trail + 1);
     }
@@ -5497,8 +5493,7 @@ Content-Type: ${value.type || "application/octet-stream"}\r
           const contentType = this.headers.get("Content-Type");
           if (/multipart\/form-data/.test(contentType)) {
             const headers = {};
-            for (const [key, value] of this.headers)
-              headers[key.toLowerCase()] = value;
+            for (const [key, value] of this.headers) headers[key.toLowerCase()] = value;
             const responseFormData = new FormData3();
             let busboy;
             try {
@@ -5539,9 +5534,7 @@ Content-Type: ${value.type || "application/octet-stream"}\r
               busboy.on("finish", resolve);
               busboy.on("error", (err) => reject(new TypeError(err)));
             });
-            if (this.body !== null)
-              for await (const chunk of consumeBody(this[kState].body))
-                busboy.write(chunk);
+            if (this.body !== null) for await (const chunk of consumeBody(this[kState].body)) busboy.write(chunk);
             busboy.end();
             await busboyResolve;
             return responseFormData;
@@ -5931,12 +5924,9 @@ var require_request = __commonJS({
         const headers = {};
         for (const header of rawHeaders) {
           const [key, value] = header.split(": ");
-          if (value == null || value.length === 0)
-            continue;
-          if (headers[key])
-            headers[key] += `,${value}`;
-          else
-            headers[key] = value;
+          if (value == null || value.length === 0) continue;
+          if (headers[key]) headers[key] += `,${value}`;
+          else headers[key] = value;
         }
         return headers;
       }
@@ -5970,10 +5960,8 @@ var require_request = __commonJS({
         }
       } else if (request.contentType === null && key.length === 12 && key.toLowerCase() === "content-type") {
         request.contentType = val;
-        if (skipAppend)
-          request.headers[key] = processHeaderValue(key, val, skipAppend);
-        else
-          request.headers += processHeaderValue(key, val);
+        if (skipAppend) request.headers[key] = processHeaderValue(key, val, skipAppend);
+        else request.headers += processHeaderValue(key, val);
       } else if (key.length === 17 && key.toLowerCase() === "transfer-encoding") {
         throw new InvalidArgumentError("invalid transfer-encoding header");
       } else if (key.length === 10 && key.toLowerCase() === "connection") {
@@ -5995,19 +5983,15 @@ var require_request = __commonJS({
         if (Array.isArray(val)) {
           for (let i = 0; i < val.length; i++) {
             if (skipAppend) {
-              if (request.headers[key])
-                request.headers[key] += `,${processHeaderValue(key, val[i], skipAppend)}`;
-              else
-                request.headers[key] = processHeaderValue(key, val[i], skipAppend);
+              if (request.headers[key]) request.headers[key] += `,${processHeaderValue(key, val[i], skipAppend)}`;
+              else request.headers[key] = processHeaderValue(key, val[i], skipAppend);
             } else {
               request.headers += processHeaderValue(key, val[i]);
             }
           }
         } else {
-          if (skipAppend)
-            request.headers[key] = processHeaderValue(key, val, skipAppend);
-          else
-            request.headers += processHeaderValue(key, val);
+          if (skipAppend) request.headers[key] = processHeaderValue(key, val, skipAppend);
+          else request.headers += processHeaderValue(key, val);
         }
       }
     }
@@ -8124,10 +8108,8 @@ upgrade: ${upgrade}\r
     function writeH2(client2, session, request) {
       const { body, method, path: path2, host, upgrade, expectContinue, signal, headers: reqHeaders } = request;
       let headers;
-      if (typeof reqHeaders === "string")
-        headers = Request2[kHTTP2CopyHeaders](reqHeaders.trim());
-      else
-        headers = reqHeaders;
+      if (typeof reqHeaders === "string") headers = Request2[kHTTP2CopyHeaders](reqHeaders.trim());
+      else headers = reqHeaders;
       if (upgrade) {
         errorRequest(client2, request, new Error("Upgrade not supported for H2"));
         return false;
@@ -8163,8 +8145,7 @@ upgrade: ${upgrade}\r
         }
         stream4.once("close", () => {
           h2State.openStreams -= 1;
-          if (h2State.openStreams === 0)
-            session.unref();
+          if (h2State.openStreams === 0) session.unref();
         });
         return true;
       }
@@ -8953,8 +8934,7 @@ var require_balanced_pool = __commonJS({
     var kMaxWeightPerServer = Symbol("kMaxWeightPerServer");
     var kErrorPenalty = Symbol("kErrorPenalty");
     function getGreatestCommonDivisor(a, b) {
-      if (b === 0)
-        return a;
+      if (b === 0) return a;
       return getGreatestCommonDivisor(b, a % b);
     }
     function defaultFactory(origin2, opts) {
@@ -11326,8 +11306,7 @@ var require_RetryHandler = __commonJS({
         }
       }
       onBodySent(chunk) {
-        if (this.handler.onBodySent)
-          return this.handler.onBodySent(chunk);
+        if (this.handler.onBodySent) return this.handler.onBodySent(chunk);
       }
       static [kRetryHandlerDefaultRetry](err, { state, opts }, cb) {
         const { statusCode, code, headers } = err;
@@ -11591,10 +11570,8 @@ var require_headers = __commonJS({
     function headerValueNormalize(potentialValue) {
       let i = 0;
       let j = potentialValue.length;
-      while (j > i && isHTTPWhiteSpaceCharCode(potentialValue.charCodeAt(j - 1)))
-        --j;
-      while (j > i && isHTTPWhiteSpaceCharCode(potentialValue.charCodeAt(i)))
-        ++i;
+      while (j > i && isHTTPWhiteSpaceCharCode(potentialValue.charCodeAt(j - 1))) --j;
+      while (j > i && isHTTPWhiteSpaceCharCode(potentialValue.charCodeAt(i))) ++i;
       return i === 0 && j === potentialValue.length ? potentialValue : potentialValue.substring(i, j);
     }
     function fill(headers, object) {
@@ -14925,8 +14902,7 @@ var require_cache = __commonJS({
       async matchAll(request = void 0, options = {}) {
         var _a;
         webidl.brandCheck(this, _Cache);
-        if (request !== void 0)
-          request = webidl.converters.RequestInfo(request);
+        if (request !== void 0) request = webidl.converters.RequestInfo(request);
         options = webidl.converters.CacheQueryOptions(options);
         let r = null;
         if (request !== void 0) {
@@ -15195,8 +15171,7 @@ var require_cache = __commonJS({
        */
       async keys(request = void 0, options = {}) {
         webidl.brandCheck(this, _Cache);
-        if (request !== void 0)
-          request = webidl.converters.RequestInfo(request);
+        if (request !== void 0) request = webidl.converters.RequestInfo(request);
         options = webidl.converters.CacheQueryOptions(options);
         let r = null;
         if (request !== void 0) {
@@ -17336,8 +17311,7 @@ var require_lib = __commonJS({
   "node_modules/@actions/http-client/lib/index.js"(exports2) {
     "use strict";
     var __createBinding = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
-      if (k2 === void 0)
-        k2 = k;
+      if (k2 === void 0) k2 = k;
       var desc = Object.getOwnPropertyDescriptor(m, k);
       if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
         desc = { enumerable: true, get: function() {
@@ -17346,8 +17320,7 @@ var require_lib = __commonJS({
       }
       Object.defineProperty(o, k2, desc);
     } : function(o, m, k, k2) {
-      if (k2 === void 0)
-        k2 = k;
+      if (k2 === void 0) k2 = k;
       o[k2] = m[k];
     });
     var __setModuleDefault = exports2 && exports2.__setModuleDefault || (Object.create ? function(o, v) {
@@ -17356,13 +17329,10 @@ var require_lib = __commonJS({
       o["default"] = v;
     });
     var __importStar = exports2 && exports2.__importStar || function(mod) {
-      if (mod && mod.__esModule)
-        return mod;
+      if (mod && mod.__esModule) return mod;
       var result = {};
       if (mod != null) {
-        for (var k in mod)
-          if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k))
-            __createBinding(result, mod, k);
+        for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
       }
       __setModuleDefault(result, mod);
       return result;
@@ -18456,8 +18426,7 @@ var require_path_utils = __commonJS({
   "node_modules/@actions/core/lib/path-utils.js"(exports2) {
     "use strict";
     var __createBinding = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
-      if (k2 === void 0)
-        k2 = k;
+      if (k2 === void 0) k2 = k;
       var desc = Object.getOwnPropertyDescriptor(m, k);
       if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
         desc = { enumerable: true, get: function() {
@@ -18466,8 +18435,7 @@ var require_path_utils = __commonJS({
       }
       Object.defineProperty(o, k2, desc);
     } : function(o, m, k, k2) {
-      if (k2 === void 0)
-        k2 = k;
+      if (k2 === void 0) k2 = k;
       o[k2] = m[k];
     });
     var __setModuleDefault = exports2 && exports2.__setModuleDefault || (Object.create ? function(o, v) {
@@ -18476,13 +18444,10 @@ var require_path_utils = __commonJS({
       o["default"] = v;
     });
     var __importStar = exports2 && exports2.__importStar || function(mod) {
-      if (mod && mod.__esModule)
-        return mod;
+      if (mod && mod.__esModule) return mod;
       var result = {};
       if (mod != null) {
-        for (var k in mod)
-          if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k))
-            __createBinding(result, mod, k);
+        for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
       }
       __setModuleDefault(result, mod);
       return result;
@@ -18510,14 +18475,12 @@ var require_io_util = __commonJS({
   "node_modules/@actions/io/lib/io-util.js"(exports2) {
     "use strict";
     var __createBinding = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
-      if (k2 === void 0)
-        k2 = k;
+      if (k2 === void 0) k2 = k;
       Object.defineProperty(o, k2, { enumerable: true, get: function() {
         return m[k];
       } });
     } : function(o, m, k, k2) {
-      if (k2 === void 0)
-        k2 = k;
+      if (k2 === void 0) k2 = k;
       o[k2] = m[k];
     });
     var __setModuleDefault = exports2 && exports2.__setModuleDefault || (Object.create ? function(o, v) {
@@ -18526,13 +18489,10 @@ var require_io_util = __commonJS({
       o["default"] = v;
     });
     var __importStar = exports2 && exports2.__importStar || function(mod) {
-      if (mod && mod.__esModule)
-        return mod;
+      if (mod && mod.__esModule) return mod;
       var result = {};
       if (mod != null) {
-        for (var k in mod)
-          if (k !== "default" && Object.hasOwnProperty.call(mod, k))
-            __createBinding(result, mod, k);
+        for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
       }
       __setModuleDefault(result, mod);
       return result;
@@ -18688,14 +18648,12 @@ var require_io = __commonJS({
   "node_modules/@actions/io/lib/io.js"(exports2) {
     "use strict";
     var __createBinding = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
-      if (k2 === void 0)
-        k2 = k;
+      if (k2 === void 0) k2 = k;
       Object.defineProperty(o, k2, { enumerable: true, get: function() {
         return m[k];
       } });
     } : function(o, m, k, k2) {
-      if (k2 === void 0)
-        k2 = k;
+      if (k2 === void 0) k2 = k;
       o[k2] = m[k];
     });
     var __setModuleDefault = exports2 && exports2.__setModuleDefault || (Object.create ? function(o, v) {
@@ -18704,13 +18662,10 @@ var require_io = __commonJS({
       o["default"] = v;
     });
     var __importStar = exports2 && exports2.__importStar || function(mod) {
-      if (mod && mod.__esModule)
-        return mod;
+      if (mod && mod.__esModule) return mod;
       var result = {};
       if (mod != null) {
-        for (var k in mod)
-          if (k !== "default" && Object.hasOwnProperty.call(mod, k))
-            __createBinding(result, mod, k);
+        for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
       }
       __setModuleDefault(result, mod);
       return result;
@@ -18941,14 +18896,12 @@ var require_toolrunner = __commonJS({
   "node_modules/@actions/exec/lib/toolrunner.js"(exports2) {
     "use strict";
     var __createBinding = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
-      if (k2 === void 0)
-        k2 = k;
+      if (k2 === void 0) k2 = k;
       Object.defineProperty(o, k2, { enumerable: true, get: function() {
         return m[k];
       } });
     } : function(o, m, k, k2) {
-      if (k2 === void 0)
-        k2 = k;
+      if (k2 === void 0) k2 = k;
       o[k2] = m[k];
     });
     var __setModuleDefault = exports2 && exports2.__setModuleDefault || (Object.create ? function(o, v) {
@@ -18957,13 +18910,10 @@ var require_toolrunner = __commonJS({
       o["default"] = v;
     });
     var __importStar = exports2 && exports2.__importStar || function(mod) {
-      if (mod && mod.__esModule)
-        return mod;
+      if (mod && mod.__esModule) return mod;
       var result = {};
       if (mod != null) {
-        for (var k in mod)
-          if (k !== "default" && Object.hasOwnProperty.call(mod, k))
-            __createBinding(result, mod, k);
+        for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
       }
       __setModuleDefault(result, mod);
       return result;
@@ -19430,14 +19380,12 @@ var require_exec = __commonJS({
   "node_modules/@actions/exec/lib/exec.js"(exports2) {
     "use strict";
     var __createBinding = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
-      if (k2 === void 0)
-        k2 = k;
+      if (k2 === void 0) k2 = k;
       Object.defineProperty(o, k2, { enumerable: true, get: function() {
         return m[k];
       } });
     } : function(o, m, k, k2) {
-      if (k2 === void 0)
-        k2 = k;
+      if (k2 === void 0) k2 = k;
       o[k2] = m[k];
     });
     var __setModuleDefault = exports2 && exports2.__setModuleDefault || (Object.create ? function(o, v) {
@@ -19446,13 +19394,10 @@ var require_exec = __commonJS({
       o["default"] = v;
     });
     var __importStar = exports2 && exports2.__importStar || function(mod) {
-      if (mod && mod.__esModule)
-        return mod;
+      if (mod && mod.__esModule) return mod;
       var result = {};
       if (mod != null) {
-        for (var k in mod)
-          if (k !== "default" && Object.hasOwnProperty.call(mod, k))
-            __createBinding(result, mod, k);
+        for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
       }
       __setModuleDefault(result, mod);
       return result;
@@ -19542,8 +19487,7 @@ var require_platform = __commonJS({
   "node_modules/@actions/core/lib/platform.js"(exports2) {
     "use strict";
     var __createBinding = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
-      if (k2 === void 0)
-        k2 = k;
+      if (k2 === void 0) k2 = k;
       var desc = Object.getOwnPropertyDescriptor(m, k);
       if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
         desc = { enumerable: true, get: function() {
@@ -19552,8 +19496,7 @@ var require_platform = __commonJS({
       }
       Object.defineProperty(o, k2, desc);
     } : function(o, m, k, k2) {
-      if (k2 === void 0)
-        k2 = k;
+      if (k2 === void 0) k2 = k;
       o[k2] = m[k];
     });
     var __setModuleDefault = exports2 && exports2.__setModuleDefault || (Object.create ? function(o, v) {
@@ -19562,13 +19505,10 @@ var require_platform = __commonJS({
       o["default"] = v;
     });
     var __importStar = exports2 && exports2.__importStar || function(mod) {
-      if (mod && mod.__esModule)
-        return mod;
+      if (mod && mod.__esModule) return mod;
       var result = {};
       if (mod != null) {
-        for (var k in mod)
-          if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k))
-            __createBinding(result, mod, k);
+        for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
       }
       __setModuleDefault(result, mod);
       return result;
@@ -19666,8 +19606,7 @@ var require_core = __commonJS({
   "node_modules/@actions/core/lib/core.js"(exports2) {
     "use strict";
     var __createBinding = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
-      if (k2 === void 0)
-        k2 = k;
+      if (k2 === void 0) k2 = k;
       var desc = Object.getOwnPropertyDescriptor(m, k);
       if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
         desc = { enumerable: true, get: function() {
@@ -19676,8 +19615,7 @@ var require_core = __commonJS({
       }
       Object.defineProperty(o, k2, desc);
     } : function(o, m, k, k2) {
-      if (k2 === void 0)
-        k2 = k;
+      if (k2 === void 0) k2 = k;
       o[k2] = m[k];
     });
     var __setModuleDefault = exports2 && exports2.__setModuleDefault || (Object.create ? function(o, v) {
@@ -19686,13 +19624,10 @@ var require_core = __commonJS({
       o["default"] = v;
     });
     var __importStar = exports2 && exports2.__importStar || function(mod) {
-      if (mod && mod.__esModule)
-        return mod;
+      if (mod && mod.__esModule) return mod;
       var result = {};
       if (mod != null) {
-        for (var k in mod)
-          if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k))
-            __createBinding(result, mod, k);
+        for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
       }
       __setModuleDefault(result, mod);
       return result;
@@ -19958,14 +19893,12 @@ var require_utils3 = __commonJS({
   "node_modules/@actions/github/lib/internal/utils.js"(exports2) {
     "use strict";
     var __createBinding = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
-      if (k2 === void 0)
-        k2 = k;
+      if (k2 === void 0) k2 = k;
       Object.defineProperty(o, k2, { enumerable: true, get: function() {
         return m[k];
       } });
     } : function(o, m, k, k2) {
-      if (k2 === void 0)
-        k2 = k;
+      if (k2 === void 0) k2 = k;
       o[k2] = m[k];
     });
     var __setModuleDefault = exports2 && exports2.__setModuleDefault || (Object.create ? function(o, v) {
@@ -19974,13 +19907,10 @@ var require_utils3 = __commonJS({
       o["default"] = v;
     });
     var __importStar = exports2 && exports2.__importStar || function(mod) {
-      if (mod && mod.__esModule)
-        return mod;
+      if (mod && mod.__esModule) return mod;
       var result = {};
       if (mod != null) {
-        for (var k in mod)
-          if (k !== "default" && Object.hasOwnProperty.call(mod, k))
-            __createBinding(result, mod, k);
+        for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
       }
       __setModuleDefault(result, mod);
       return result;
@@ -20180,14 +20110,11 @@ var require_is_plain_object = __commonJS({
     }
     function isPlainObject2(o) {
       var ctor, prot;
-      if (isObject2(o) === false)
-        return false;
+      if (isObject2(o) === false) return false;
       ctor = o.constructor;
-      if (ctor === void 0)
-        return true;
+      if (ctor === void 0) return true;
       prot = ctor.prototype;
-      if (isObject2(prot) === false)
-        return false;
+      if (isObject2(prot) === false) return false;
       if (prot.hasOwnProperty("isPrototypeOf") === false) {
         return false;
       }
@@ -20217,12 +20144,10 @@ var require_dist_node2 = __commonJS({
       const result = Object.assign({}, defaults2);
       Object.keys(options).forEach((key) => {
         if (isPlainObject2.isPlainObject(options[key])) {
-          if (!(key in defaults2))
-            Object.assign(result, {
-              [key]: options[key]
-            });
-          else
-            result[key] = mergeDeep(defaults2[key], options[key]);
+          if (!(key in defaults2)) Object.assign(result, {
+            [key]: options[key]
+          });
+          else result[key] = mergeDeep(defaults2[key], options[key]);
         } else {
           Object.assign(result, {
             [key]: options[key]
@@ -20521,8 +20446,7 @@ var require_lib2 = __commonJS({
       const moduloVal = typeOpts.moduloBitLength ? Math.pow(2, typeOpts.moduloBitLength) : Math.pow(2, bitLength);
       const moduloBound = typeOpts.moduloBitLength ? Math.pow(2, typeOpts.moduloBitLength - 1) : Math.pow(2, bitLength - 1);
       return function(V, opts) {
-        if (!opts)
-          opts = {};
+        if (!opts) opts = {};
         let x = +V;
         if (opts.enforceRange) {
           if (!Number.isFinite(x)) {
@@ -20536,10 +20460,8 @@ var require_lib2 = __commonJS({
         }
         if (!isNaN(x) && opts.clamp) {
           x = evenRound(x);
-          if (x < lowerBound)
-            x = lowerBound;
-          if (x > upperBound)
-            x = upperBound;
+          if (x < lowerBound) x = lowerBound;
+          if (x > upperBound) x = upperBound;
           return x;
         }
         if (!Number.isFinite(x) || x === 0) {
@@ -20590,8 +20512,7 @@ var require_lib2 = __commonJS({
     conversions["float"] = conversions["double"];
     conversions["unrestricted float"] = conversions["unrestricted double"];
     conversions["DOMString"] = function(V, opts) {
-      if (!opts)
-        opts = {};
+      if (!opts) opts = {};
       if (opts.treatNullAsEmptyString && V === null) {
         return "";
       }
@@ -20828,8 +20749,7 @@ var require_tr46 = __commonJS({
           }
         }
       }
-      if (result.error)
-        return null;
+      if (result.error) return null;
       return labels.join(".");
     };
     module2.exports.toUnicode = function(domain_name, useSTD3) {
@@ -22240,8 +22160,7 @@ var require_URL = __commonJS({
         return obj;
       },
       setup(obj, constructorArgs, privateData) {
-        if (!privateData)
-          privateData = {};
+        if (!privateData) privateData = {};
         privateData.wrapper = obj;
         obj[impl] = new Impl.implementation(constructorArgs, privateData);
         obj[impl][utils.wrapperSymbol] = obj;
@@ -22414,16 +22333,13 @@ var require_lib3 = __commonJS({
         body = null;
       } else if (isURLSearchParams2(body)) {
         body = Buffer.from(body.toString());
-      } else if (isBlob2(body))
-        ;
-      else if (Buffer.isBuffer(body))
-        ;
+      } else if (isBlob2(body)) ;
+      else if (Buffer.isBuffer(body)) ;
       else if (Object.prototype.toString.call(body) === "[object ArrayBuffer]") {
         body = Buffer.from(body);
       } else if (ArrayBuffer.isView(body)) {
         body = Buffer.from(body.buffer, body.byteOffset, body.byteLength);
-      } else if (body instanceof Stream)
-        ;
+      } else if (body instanceof Stream) ;
       else {
         body = Buffer.from(String(body));
       }
@@ -22766,8 +22682,7 @@ var require_lib3 = __commonJS({
           }
           return;
         }
-        if (init == null)
-          ;
+        if (init == null) ;
         else if (typeof init === "object") {
           const method = init[Symbol.iterator];
           if (method != null) {
@@ -23149,8 +23064,7 @@ var require_lib3 = __commonJS({
           }
         }
         let signal = isRequest2(input) ? input.signal : null;
-        if ("signal" in init)
-          signal = init.signal;
+        if ("signal" in init) signal = init.signal;
         if (signal != null && !isAbortSignal(signal)) {
           throw new TypeError("Expected signal to be an instanceof AbortSignal");
         }
@@ -23287,8 +23201,7 @@ var require_lib3 = __commonJS({
           if (request.body && request.body instanceof Stream.Readable) {
             destroyStream(request.body, error2);
           }
-          if (!response || !response.body)
-            return;
+          if (!response || !response.body) return;
           response.body.emit("error", error2);
         };
         if (signal && signal.aborted) {
@@ -23306,8 +23219,7 @@ var require_lib3 = __commonJS({
         }
         function finalize() {
           req.abort();
-          if (signal)
-            signal.removeEventListener("abort", abortAndFinalize);
+          if (signal) signal.removeEventListener("abort", abortAndFinalize);
           clearTimeout(reqTimeout);
         }
         if (request.timeout) {
@@ -23416,8 +23328,7 @@ var require_lib3 = __commonJS({
             }
           }
           res.once("end", function() {
-            if (signal)
-              signal.removeEventListener("abort", abortAndFinalize);
+            if (signal) signal.removeEventListener("abort", abortAndFinalize);
           });
           let body = res.pipe(new PassThrough$1());
           const response_options = {
@@ -23541,8 +23452,7 @@ var require_wrappy = __commonJS({
   "node_modules/wrappy/wrappy.js"(exports2, module2) {
     module2.exports = wrappy;
     function wrappy(fn, cb) {
-      if (fn && cb)
-        return wrappy(fn)(cb);
+      if (fn && cb) return wrappy(fn)(cb);
       if (typeof fn !== "function")
         throw new TypeError("need wrapper function");
       Object.keys(fn).forEach(function(k) {
@@ -23589,8 +23499,7 @@ var require_once = __commonJS({
     });
     function once(fn) {
       var f = function() {
-        if (f.called)
-          return f.value;
+        if (f.called) return f.value;
         f.called = true;
         return f.value = fn.apply(this, arguments);
       };
@@ -23763,8 +23672,7 @@ var require_dist_node5 = __commonJS({
           data
         };
       }).catch((error2) => {
-        if (error2 instanceof requestError.RequestError)
-          throw error2;
+        if (error2 instanceof requestError.RequestError) throw error2;
         throw new requestError.RequestError(error2.message, 500, {
           request: requestOptions
         });
@@ -23781,8 +23689,7 @@ var require_dist_node5 = __commonJS({
       return getBufferResponse(response);
     }
     function toErrorMessage(data) {
-      if (typeof data === "string")
-        return data;
+      if (typeof data === "string") return data;
       if ("message" in data) {
         if (Array.isArray(data.errors)) {
           return `${data.message}: ${data.errors.map(JSON.stringify).join(", ")}`;
@@ -23856,8 +23763,7 @@ var require_dist_node6 = __commonJS({
           return Promise.reject(new Error(`[@octokit/graphql] "query" cannot be used as variable name`));
         }
         for (const key in options) {
-          if (!FORBIDDEN_VARIABLE_OPTIONS.includes(key))
-            continue;
+          if (!FORBIDDEN_VARIABLE_OPTIONS.includes(key)) continue;
           return Promise.reject(new Error(`[@octokit/graphql] "${key}" cannot be used as variable name`));
         }
       }
@@ -23976,32 +23882,27 @@ var require_dist_node8 = __commonJS({
     var graphql = require_dist_node6();
     var authToken = require_dist_node7();
     function _objectWithoutPropertiesLoose(source, excluded) {
-      if (source == null)
-        return {};
+      if (source == null) return {};
       var target = {};
       var sourceKeys = Object.keys(source);
       var key, i;
       for (i = 0; i < sourceKeys.length; i++) {
         key = sourceKeys[i];
-        if (excluded.indexOf(key) >= 0)
-          continue;
+        if (excluded.indexOf(key) >= 0) continue;
         target[key] = source[key];
       }
       return target;
     }
     function _objectWithoutProperties(source, excluded) {
-      if (source == null)
-        return {};
+      if (source == null) return {};
       var target = _objectWithoutPropertiesLoose(source, excluded);
       var key, i;
       if (Object.getOwnPropertySymbols) {
         var sourceSymbolKeys = Object.getOwnPropertySymbols(source);
         for (i = 0; i < sourceSymbolKeys.length; i++) {
           key = sourceSymbolKeys[i];
-          if (excluded.indexOf(key) >= 0)
-            continue;
-          if (!Object.prototype.propertyIsEnumerable.call(source, key))
-            continue;
+          if (excluded.indexOf(key) >= 0) continue;
+          if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue;
           target[key] = source[key];
         }
       }
@@ -25234,8 +25135,7 @@ var require_dist_node10 = __commonJS({
         });
       }
       const responseNeedsNormalization = "total_count" in response.data && !("url" in response.data);
-      if (!responseNeedsNormalization)
-        return response;
+      if (!responseNeedsNormalization) return response;
       const incompleteResults = response.data.incomplete_results;
       const repositorySelection = response.data.repository_selection;
       const totalCount = response.data.total_count;
@@ -25263,10 +25163,9 @@ var require_dist_node10 = __commonJS({
       return {
         [Symbol.asyncIterator]: () => ({
           async next() {
-            if (!url2)
-              return {
-                done: true
-              };
+            if (!url2) return {
+              done: true
+            };
             try {
               const response = await requestMethod({
                 method,
@@ -25279,8 +25178,7 @@ var require_dist_node10 = __commonJS({
                 value: normalizedResponse
               };
             } catch (error2) {
-              if (error2.status !== 409)
-                throw error2;
+              if (error2.status !== 409) throw error2;
               url2 = "";
               return {
                 value: {
@@ -25348,14 +25246,12 @@ var require_utils5 = __commonJS({
   "node_modules/@actions/github/lib/utils.js"(exports2) {
     "use strict";
     var __createBinding = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
-      if (k2 === void 0)
-        k2 = k;
+      if (k2 === void 0) k2 = k;
       Object.defineProperty(o, k2, { enumerable: true, get: function() {
         return m[k];
       } });
     } : function(o, m, k, k2) {
-      if (k2 === void 0)
-        k2 = k;
+      if (k2 === void 0) k2 = k;
       o[k2] = m[k];
     });
     var __setModuleDefault = exports2 && exports2.__setModuleDefault || (Object.create ? function(o, v) {
@@ -25364,13 +25260,10 @@ var require_utils5 = __commonJS({
       o["default"] = v;
     });
     var __importStar = exports2 && exports2.__importStar || function(mod) {
-      if (mod && mod.__esModule)
-        return mod;
+      if (mod && mod.__esModule) return mod;
       var result = {};
       if (mod != null) {
-        for (var k in mod)
-          if (k !== "default" && Object.hasOwnProperty.call(mod, k))
-            __createBinding(result, mod, k);
+        for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
       }
       __setModuleDefault(result, mod);
       return result;
@@ -25408,14 +25301,12 @@ var require_github = __commonJS({
   "node_modules/@actions/github/lib/github.js"(exports2) {
     "use strict";
     var __createBinding = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
-      if (k2 === void 0)
-        k2 = k;
+      if (k2 === void 0) k2 = k;
       Object.defineProperty(o, k2, { enumerable: true, get: function() {
         return m[k];
       } });
     } : function(o, m, k, k2) {
-      if (k2 === void 0)
-        k2 = k;
+      if (k2 === void 0) k2 = k;
       o[k2] = m[k];
     });
     var __setModuleDefault = exports2 && exports2.__setModuleDefault || (Object.create ? function(o, v) {
@@ -25424,13 +25315,10 @@ var require_github = __commonJS({
       o["default"] = v;
     });
     var __importStar = exports2 && exports2.__importStar || function(mod) {
-      if (mod && mod.__esModule)
-        return mod;
+      if (mod && mod.__esModule) return mod;
       var result = {};
       if (mod != null) {
-        for (var k in mod)
-          if (k !== "default" && Object.hasOwnProperty.call(mod, k))
-            __createBinding(result, mod, k);
+        for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
       }
       __setModuleDefault(result, mod);
       return result;
@@ -25775,6 +25663,8 @@ var require_semver = __commonJS({
           this.inc("patch", identifier);
           this.inc("pre", identifier);
           break;
+        // If the input is a non-prerelease version, this acts the same as
+        // prepatch.
         case "prerelease":
           if (this.prerelease.length === 0) {
             this.inc("patch", identifier);
@@ -25802,6 +25692,8 @@ var require_semver = __commonJS({
           }
           this.prerelease = [];
           break;
+        // This probably shouldn't be used publicly.
+        // 1.0.0 "pre" would become 1.0.0-0 which is the wrong direction.
         case "pre":
           if (this.prerelease.length === 0) {
             this.prerelease = [0];
@@ -26466,6 +26358,7 @@ var require_semver = __commonJS({
                 compver.prerelease.push(0);
               }
               compver.raw = compver.format();
+            /* fallthrough */
             case "":
             case ">=":
               if (!minver || gt(minver, compver)) {
@@ -26475,6 +26368,7 @@ var require_semver = __commonJS({
             case "<":
             case "<=":
               break;
+            /* istanbul ignore next */
             default:
               throw new Error("Unexpected operation: " + comparator.operator);
           }
@@ -26603,8 +26497,7 @@ var require_manifest = __commonJS({
   "node_modules/@actions/tool-cache/lib/manifest.js"(exports2, module2) {
     "use strict";
     var __createBinding = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
-      if (k2 === void 0)
-        k2 = k;
+      if (k2 === void 0) k2 = k;
       var desc = Object.getOwnPropertyDescriptor(m, k);
       if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
         desc = { enumerable: true, get: function() {
@@ -26613,8 +26506,7 @@ var require_manifest = __commonJS({
       }
       Object.defineProperty(o, k2, desc);
     } : function(o, m, k, k2) {
-      if (k2 === void 0)
-        k2 = k;
+      if (k2 === void 0) k2 = k;
       o[k2] = m[k];
     });
     var __setModuleDefault = exports2 && exports2.__setModuleDefault || (Object.create ? function(o, v) {
@@ -26623,13 +26515,10 @@ var require_manifest = __commonJS({
       o["default"] = v;
     });
     var __importStar = exports2 && exports2.__importStar || function(mod) {
-      if (mod && mod.__esModule)
-        return mod;
+      if (mod && mod.__esModule) return mod;
       var result = {};
       if (mod != null) {
-        for (var k in mod)
-          if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k))
-            __createBinding(result, mod, k);
+        for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
       }
       __setModuleDefault(result, mod);
       return result;
@@ -26747,8 +26636,7 @@ var require_retry_helper = __commonJS({
   "node_modules/@actions/tool-cache/lib/retry-helper.js"(exports2) {
     "use strict";
     var __createBinding = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
-      if (k2 === void 0)
-        k2 = k;
+      if (k2 === void 0) k2 = k;
       var desc = Object.getOwnPropertyDescriptor(m, k);
       if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
         desc = { enumerable: true, get: function() {
@@ -26757,8 +26645,7 @@ var require_retry_helper = __commonJS({
       }
       Object.defineProperty(o, k2, desc);
     } : function(o, m, k, k2) {
-      if (k2 === void 0)
-        k2 = k;
+      if (k2 === void 0) k2 = k;
       o[k2] = m[k];
     });
     var __setModuleDefault = exports2 && exports2.__setModuleDefault || (Object.create ? function(o, v) {
@@ -26767,13 +26654,10 @@ var require_retry_helper = __commonJS({
       o["default"] = v;
     });
     var __importStar = exports2 && exports2.__importStar || function(mod) {
-      if (mod && mod.__esModule)
-        return mod;
+      if (mod && mod.__esModule) return mod;
       var result = {};
       if (mod != null) {
-        for (var k in mod)
-          if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k))
-            __createBinding(result, mod, k);
+        for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
       }
       __setModuleDefault(result, mod);
       return result;
@@ -26858,8 +26742,7 @@ var require_tool_cache = __commonJS({
   "node_modules/@actions/tool-cache/lib/tool-cache.js"(exports2) {
     "use strict";
     var __createBinding = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
-      if (k2 === void 0)
-        k2 = k;
+      if (k2 === void 0) k2 = k;
       var desc = Object.getOwnPropertyDescriptor(m, k);
       if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
         desc = { enumerable: true, get: function() {
@@ -26868,8 +26751,7 @@ var require_tool_cache = __commonJS({
       }
       Object.defineProperty(o, k2, desc);
     } : function(o, m, k, k2) {
-      if (k2 === void 0)
-        k2 = k;
+      if (k2 === void 0) k2 = k;
       o[k2] = m[k];
     });
     var __setModuleDefault = exports2 && exports2.__setModuleDefault || (Object.create ? function(o, v) {
@@ -26878,13 +26760,10 @@ var require_tool_cache = __commonJS({
       o["default"] = v;
     });
     var __importStar = exports2 && exports2.__importStar || function(mod) {
-      if (mod && mod.__esModule)
-        return mod;
+      if (mod && mod.__esModule) return mod;
       var result = {};
       if (mod != null) {
-        for (var k in mod)
-          if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k))
-            __createBinding(result, mod, k);
+        for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
       }
       __setModuleDefault(result, mod);
       return result;
@@ -27689,8 +27568,7 @@ var require_combined_stream = __commonJS({
       if (!this.pauseStreams) {
         return;
       }
-      if (this.pauseStreams && this._currentStream && typeof this._currentStream.pause == "function")
-        this._currentStream.pause();
+      if (this.pauseStreams && this._currentStream && typeof this._currentStream.pause == "function") this._currentStream.pause();
       this.emit("pause");
     };
     CombinedStream.prototype.resume = function() {
@@ -27699,8 +27577,7 @@ var require_combined_stream = __commonJS({
         this.writable = true;
         this._getNext();
       }
-      if (this.pauseStreams && this._currentStream && typeof this._currentStream.resume == "function")
-        this._currentStream.resume();
+      if (this.pauseStreams && this._currentStream && typeof this._currentStream.resume == "function") this._currentStream.resume();
       this.emit("resume");
     };
     CombinedStream.prototype.end = function() {
@@ -36316,8 +36193,7 @@ var require_mime_types = __commonJS({
       }
       if (mime.indexOf("charset") === -1) {
         var charset2 = exports2.charset(mime);
-        if (charset2)
-          mime += "; charset=" + charset2.toLowerCase();
+        if (charset2) mime += "; charset=" + charset2.toLowerCase();
       }
       return mime;
     }
@@ -37355,7 +37231,7 @@ var require_get_intrinsic = __commonJS({
             if (!allowMissing) {
               throw new $TypeError("base intrinsic for " + name + " exists, but the property is not available.");
             }
-            return void 0;
+            return void undefined2;
           }
           if ($gOPD && i + 1 >= parts.length) {
             var desc = $gOPD(value, part);
@@ -38442,8 +38318,7 @@ function findKey(obj, key) {
   return null;
 }
 var _global = (() => {
-  if (typeof globalThis !== "undefined")
-    return globalThis;
+  if (typeof globalThis !== "undefined") return globalThis;
   return typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : global;
 })();
 var isContextDefined = (context2) => !isUndefined(context2) && context2 !== _global;
@@ -38497,8 +38372,7 @@ var toFlatObject = (sourceObj, destObj, filter2, propFilter) => {
   let prop;
   const merged = {};
   destObj = destObj || {};
-  if (sourceObj == null)
-    return destObj;
+  if (sourceObj == null) return destObj;
   do {
     props = Object.getOwnPropertyNames(sourceObj);
     i = props.length;
@@ -38523,13 +38397,10 @@ var endsWith = (str, searchString, position) => {
   return lastIndex !== -1 && lastIndex === position;
 };
 var toArray = (thing) => {
-  if (!thing)
-    return null;
-  if (isArray(thing))
-    return thing;
+  if (!thing) return null;
+  if (isArray(thing)) return thing;
   let i = thing.length;
-  if (!isNumber(i))
-    return null;
+  if (!isNumber(i)) return null;
   const arr = new Array(i);
   while (i-- > 0) {
     arr[i] = thing[i];
@@ -38586,8 +38457,7 @@ var freezeMethods = (obj) => {
       return false;
     }
     const value = obj[name];
-    if (!isFunction(value))
-      return;
+    if (!isFunction(value)) return;
     descriptor.enumerable = false;
     if ("writable" in descriptor) {
       descriptor.writable = false;
@@ -38810,8 +38680,7 @@ function removeBrackets(key) {
   return utils_default.endsWith(key, "[]") ? key.slice(0, -2) : key;
 }
 function renderKey(path2, key, dots) {
-  if (!path2)
-    return key;
+  if (!path2) return key;
   return path2.concat(key).map(function each(token, i) {
     token = removeBrackets(token);
     return !dots && i ? "[" + token + "]" : token;
@@ -38845,8 +38714,7 @@ function toFormData(obj, formData, options) {
     throw new TypeError("visitor must be a function");
   }
   function convertValue(value) {
-    if (value === null)
-      return "";
+    if (value === null) return "";
     if (utils_default.isDate(value)) {
       return value.toISOString();
     }
@@ -38889,8 +38757,7 @@ function toFormData(obj, formData, options) {
     isVisitable
   });
   function build(value, path2) {
-    if (utils_default.isUndefined(value))
-      return;
+    if (utils_default.isUndefined(value)) return;
     if (stack.indexOf(value) !== -1) {
       throw Error("Circular reference detected in " + path2.join("."));
     }
@@ -39147,8 +39014,7 @@ function arrayToObject(arr) {
 function formDataToJSON(formData) {
   function buildPath(path2, value, target, index) {
     let name = path2[index++];
-    if (name === "__proto__")
-      return true;
+    if (name === "__proto__") return true;
     const isNumericKey = Number.isFinite(+name);
     const isLast = index >= path2.length;
     name = !name && utils_default.isArray(target) ? target.length : name;
@@ -39362,8 +39228,7 @@ function matchHeaderValue(context2, value, header, filter2, isHeaderNameFilter) 
   if (isHeaderNameFilter) {
     value = header;
   }
-  if (!utils_default.isString(value))
-    return;
+  if (!utils_default.isString(value)) return;
   if (utils_default.isString(filter2)) {
     return value.indexOf(filter2) !== -1;
   }
@@ -40101,8 +39966,7 @@ var wrapAsync = (asyncExecutor) => {
     let onDone;
     let isDone;
     const done = (value, isRejected) => {
-      if (isDone)
-        return;
+      if (isDone) return;
       isDone = true;
       onDone && onDone(value, isRejected);
     };
@@ -40363,8 +40227,7 @@ var http_default = isHttpAdapterSupported && function httpAdapter(config) {
       options.insecureHTTPParser = config.insecureHTTPParser;
     }
     req = transport.request(options, function handleResponse(res) {
-      if (req.destroyed)
-        return;
+      if (req.destroyed) return;
       const streams = [res];
       const responseLength = +res.headers["content-length"];
       if (onDownloadProgress || maxDownloadRate) {
@@ -40387,6 +40250,7 @@ var http_default = isHttpAdapterSupported && function httpAdapter(config) {
           delete res.headers["content-encoding"];
         }
         switch ((res.headers["content-encoding"] || "").toLowerCase()) {
+          /*eslint default-case:0*/
           case "gzip":
           case "x-gzip":
           case "compress":
@@ -40452,8 +40316,7 @@ var http_default = isHttpAdapterSupported && function httpAdapter(config) {
           reject(err);
         });
         responseStream.on("error", function handleStreamError(err) {
-          if (req.destroyed)
-            return;
+          if (req.destroyed) return;
           reject(AxiosError_default.from(err, null, config, lastRequest));
         });
         responseStream.on("end", function handleStreamEnd() {
@@ -40501,8 +40364,7 @@ var http_default = isHttpAdapterSupported && function httpAdapter(config) {
         return;
       }
       req.setTimeout(timeout, function handleRequestTimeout() {
-        if (isDone)
-          return;
+        if (isDone) return;
         let timeoutErrorMessage = config.timeout ? "timeout of " + config.timeout + "ms exceeded" : "timeout exceeded";
         const transitional2 = config.transitional || transitional_default;
         if (config.timeoutErrorMessage) {
@@ -41446,8 +41308,7 @@ var CancelToken = class _CancelToken {
     });
     const token = this;
     this.promise.then((cancel) => {
-      if (!token._listeners)
-        return;
+      if (!token._listeners) return;
       let i = token._listeners.length;
       while (i-- > 0) {
         token._listeners[i](cancel);
@@ -41737,8 +41598,7 @@ async function resolveVersion(version) {
   const res = await client.get(`https://dl.depot.dev/cli/release/${process.platform}/${process.arch}/${version}`);
   const body = await res.readBody();
   const response = JSON.parse(body);
-  if (!response.ok)
-    throw new Error(response.error);
+  if (!response.ok) throw new Error(response.error);
   const matches = response.url.match(/cli\/releases\/download\/v(\d+\.\d+\.\d+)/);
   const resolvedVersion = matches ? matches[1] : version;
   return { url: response.url, resolvedVersion };
