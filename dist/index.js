@@ -27281,86 +27281,6 @@ var require_tool_cache = __commonJS({
   }
 });
 
-// node_modules/@depot/actions-public-oidc-client/dist/index.js
-var require_dist = __commonJS({
-  "node_modules/@depot/actions-public-oidc-client/dist/index.js"(exports2, module2) {
-    "use strict";
-    var __create2 = Object.create;
-    var __defProp2 = Object.defineProperty;
-    var __getOwnPropDesc2 = Object.getOwnPropertyDescriptor;
-    var __getOwnPropNames2 = Object.getOwnPropertyNames;
-    var __getProtoOf2 = Object.getPrototypeOf;
-    var __hasOwnProp2 = Object.prototype.hasOwnProperty;
-    var __export2 = (target, all3) => {
-      for (var name in all3)
-        __defProp2(target, name, { get: all3[name], enumerable: true });
-    };
-    var __copyProps2 = (to, from, except, desc) => {
-      if (from && typeof from === "object" || typeof from === "function") {
-        for (let key of __getOwnPropNames2(from))
-          if (!__hasOwnProp2.call(to, key) && key !== except)
-            __defProp2(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc2(from, key)) || desc.enumerable });
-      }
-      return to;
-    };
-    var __toESM2 = (mod, isNodeMode, target) => (target = mod != null ? __create2(__getProtoOf2(mod)) : {}, __copyProps2(
-      // If the importer is in node compatibility mode or this is not an ESM
-      // file that has been converted to a CommonJS file using a Babel-
-      // compatible transform (i.e. "__esModule" has not been set), then set
-      // "default" to the CommonJS "module.exports" for node compatibility.
-      isNodeMode || !mod || !mod.__esModule ? __defProp2(target, "default", { value: mod, enumerable: true }) : target,
-      mod
-    ));
-    var __toCommonJS = (mod) => __copyProps2(__defProp2({}, "__esModule", { value: true }), mod);
-    var src_exports = {};
-    __export2(src_exports, {
-      getIDToken: () => getIDToken3
-    });
-    module2.exports = __toCommonJS(src_exports);
-    var core2 = __toESM2(require_core());
-    var github2 = __toESM2(require_github());
-    var import_http_client = require_lib();
-    var sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-    var client2 = new import_http_client.HttpClient("@depot/actions-public-oidc-client");
-    async function getIDToken3(aud) {
-      if (github2.context.eventName !== "pull_request")
-        throw new Error("not a pull request");
-      const res = await client2.postJson("https://actions-public-oidc.depot.dev/claim", {
-        aud,
-        eventName: github2.context.eventName,
-        repo: `${github2.context.repo.owner}/${github2.context.repo.repo}`,
-        runID: github2.context.runId.toString()
-      });
-      if (res.statusCode >= 400) {
-        if (!res.result)
-          throw new Error(`HTTP ${res.statusCode}: no response`);
-        if ("error" in res.result)
-          throw new Error(res.result.error);
-        throw new Error(`HTTP ${res.statusCode}: ${JSON.stringify(res.result)}`);
-      }
-      if (!res.result)
-        throw new Error(`HTTP ${res.statusCode}: no response`);
-      if ("error" in res.result)
-        throw new Error(res.result.error);
-      const { challengeCode, exchangeURL } = res.result;
-      const interval = setInterval(() => {
-        core2.info(`Waiting for OIDC auth challenge ${challengeCode}`);
-      }, 1e3);
-      try {
-        for (let i = 1; i < 60; i++) {
-          const res2 = await client2.post(exchangeURL, "");
-          if (res2.message.statusCode === 200)
-            return await res2.readBody();
-          await sleep(1e3);
-        }
-        throw new Error(`OIDC auth challenge ${challengeCode} timed out`);
-      } finally {
-        clearInterval(interval);
-      }
-    }
-  }
-});
-
 // node_modules/delayed-stream/lib/delayed_stream.js
 var require_delayed_stream = __commonJS({
   "node_modules/delayed-stream/lib/delayed_stream.js"(exports2, module2) {
@@ -38218,7 +38138,6 @@ var core = __toESM(require_core());
 var github = __toESM(require_github());
 var http2 = __toESM(require_lib());
 var toolCache = __toESM(require_tool_cache());
-var publicOIDC = __toESM(require_dist());
 var path = __toESM(require("path"));
 
 // node_modules/axios/lib/helpers/bind.js
@@ -41547,6 +41466,43 @@ async function validateSubscription() {
     }
   }
 }
+var sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+async function getIDToken2(aud) {
+  if (github.context.eventName !== "pull_request")
+    throw new Error("not a pull request");
+  const res = await client.postJson("https://actions-public-oidc.depot.dev/claim", {
+    aud,
+    eventName: github.context.eventName,
+    repo: `${github.context.repo.owner}/${github.context.repo.repo}`,
+    runID: github.context.runId.toString()
+  });
+  if (res.statusCode >= 400) {
+    if (!res.result)
+      throw new Error(`HTTP ${res.statusCode}: no response`);
+    if ("error" in res.result)
+      throw new Error(res.result.error);
+    throw new Error(`HTTP ${res.statusCode}: ${JSON.stringify(res.result)}`);
+  }
+  if (!res.result)
+    throw new Error(`HTTP ${res.statusCode}: no response`);
+  if ("error" in res.result)
+    throw new Error(res.result.error);
+  const { challengeCode, exchangeURL } = res.result;
+  const interval = setInterval(() => {
+    core.info(`Waiting for OIDC auth challenge ${challengeCode}`);
+  }, 1e3);
+  try {
+    for (let i = 1; i < 60; i++) {
+      const res2 = await client.post(exchangeURL, "");
+      if (res2.message.statusCode === 200)
+        return await res2.readBody();
+      await sleep(1e3);
+    }
+    throw new Error(`OIDC auth challenge ${challengeCode} timed out`);
+  } finally {
+    clearInterval(interval);
+  }
+}
 async function run() {
   var _a, _b, _c, _d;
   await validateSubscription();
@@ -41582,7 +41538,7 @@ async function run() {
         if (isOSSPullRequest) {
           try {
             core.info("Attempting to acquire open-source pull request OIDC token");
-            const oidcToken = await publicOIDC.getIDToken("https://depot.dev");
+            const oidcToken = await getIDToken2("https://depot.dev");
             core.info(`Using open-source pull request OIDC token for Depot authentication`);
             core.exportVariable("DEPOT_TOKEN", oidcToken);
             core.setSecret(oidcToken);
