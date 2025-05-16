@@ -2,7 +2,6 @@ import * as core from '@actions/core'
 import * as github from '@actions/github'
 import * as http from '@actions/http-client'
 import * as toolCache from '@actions/tool-cache'
-import * as publicOIDC from '@depot/actions-public-oidc-client'
 import * as path from 'path'
 import axios, { isAxiosError } from 'axios'
 
