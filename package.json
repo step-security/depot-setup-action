@@ -16,7 +16,7 @@
   },
   "devDependencies": {
     "@tsconfig/node16": "^16.1.0",
-    "@types/node": "~20.5.1",
+    "@types/node": "~24.0.8",
     "esbuild": "^0.25.4",
     "prettier": "^3.0.2",
     "prettier-plugin-organize-imports": "^3.2.3",
