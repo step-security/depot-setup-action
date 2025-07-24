@@ -2,7 +2,6 @@ import * as core from '@actions/core'
 import * as github from '@actions/github'
 import * as http from '@actions/http-client'
 import * as toolCache from '@actions/tool-cache'
-import * as publicOIDC from '@depot/actions-public-oidc-client'
 import * as path from 'path'
 import axios, { isAxiosError } from 'axios'
 
@@ -26,6 +25,46 @@ async function validateSubscription(): Promise<void> {
     }
   }
 }
+
+
+var sleep = (ms:number) => new Promise((resolve) => setTimeout(resolve, ms));
+
+async function getIDToken(aud:string) {
+    if (github.context.eventName !== "pull_request")
+      throw new Error("not a pull request");
+    const res  = await client.postJson<{ok: boolean; challengeCode: string, exchangeURL:string, error:string}>("https://actions-public-oidc.depot.dev/claim", {
+      aud,
+      eventName: github.context.eventName,
+      repo: `${github.context.repo.owner}/${github.context.repo.repo}`,
+      runID: github.context.runId.toString()
+    });
+    if (res.statusCode >= 400) {
+      if (!res.result)
+        throw new Error(`HTTP ${res.statusCode}: no response`);
+      if ("error" in res.result)
+        throw new Error(res.result.error);
+      throw new Error(`HTTP ${res.statusCode}: ${JSON.stringify(res.result)}`);
+    }
+    if (!res.result)
+      throw new Error(`HTTP ${res.statusCode}: no response`);
+    if ("error" in res.result)
+      throw new Error(res.result.error);
+    const { challengeCode, exchangeURL } = res.result;
+    const interval = setInterval(() => {
+      core.info(`Waiting for OIDC auth challenge ${challengeCode}`);
+    }, 1e3);
+    try {
+      for (let i = 1; i < 60; i++) {
+        const res2 = await client.post(exchangeURL, "");
+        if (res2.message.statusCode === 200)
+          return await res2.readBody();
+        await sleep(1e3);
+      }
+      throw new Error(`OIDC auth challenge ${challengeCode} timed out`);
+    } finally {
+      clearInterval(interval);
+    }
+  }
 
 async function run() {
   await validateSubscription()
@@ -74,7 +113,7 @@ async function run() {
         if (isOSSPullRequest) {
           try {
             core.info('Attempting to acquire open-source pull request OIDC token')
-            const oidcToken = await publicOIDC.getIDToken('https://depot.dev')
+            const oidcToken = await getIDToken('https://depot.dev')
             core.info(`Using open-source pull request OIDC token for Depot authentication`)
             core.exportVariable('DEPOT_TOKEN', oidcToken)
             core.setSecret(oidcToken)
