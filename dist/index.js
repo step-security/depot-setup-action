@@ -37301,6 +37301,7 @@ var require_es_set_tostringtag = __commonJS({
 // node_modules/form-data/lib/populate.js
 var require_populate = __commonJS({
   "node_modules/form-data/lib/populate.js"(exports2, module2) {
+    "use strict";
     module2.exports = function(dst, src) {
       Object.keys(src).forEach(function(prop) {
         dst[prop] = dst[prop] || src[prop];
@@ -37313,6 +37314,7 @@ var require_populate = __commonJS({
 // node_modules/form-data/lib/form_data.js
 var require_form_data = __commonJS({
   "node_modules/form-data/lib/form_data.js"(exports2, module2) {
+    "use strict";
     var CombinedStream = require_combined_stream();
     var util3 = require("util");
     var path2 = require("path");
@@ -37321,12 +37323,12 @@ var require_form_data = __commonJS({
     var parseUrl = require("url").parse;
     var fs = require("fs");
     var Stream = require("stream").Stream;
+    var crypto2 = require("crypto");
     var mime = require_mime_types();
     var asynckit = require_asynckit();
     var setToStringTag = require_es_set_tostringtag();
+    var hasOwn = require_hasown();
     var populate = require_populate();
-    module2.exports = FormData3;
-    util3.inherits(FormData3, CombinedStream);
     function FormData3(options) {
       if (!(this instanceof FormData3)) {
         return new FormData3(options);
@@ -37340,16 +37342,17 @@ var require_form_data = __commonJS({
         this[option] = options[option];
       }
     }
+    util3.inherits(FormData3, CombinedStream);
     FormData3.LINE_BREAK = "\r\n";
     FormData3.DEFAULT_CONTENT_TYPE = "application/octet-stream";
     FormData3.prototype.append = function(field, value, options) {
       options = options || {};
-      if (typeof options == "string") {
+      if (typeof options === "string") {
         options = { filename: options };
       }
       var append2 = CombinedStream.prototype.append.bind(this);
-      if (typeof value == "number") {
-        value = "" + value;
+      if (typeof value === "number" || value == null) {
+        value = String(value);
       }
       if (Array.isArray(value)) {
         this._error(new Error("Arrays are not supported."));
@@ -37365,7 +37368,7 @@ var require_form_data = __commonJS({
     FormData3.prototype._trackLength = function(header, value, options) {
       var valueLength = 0;
       if (options.knownLength != null) {
-        valueLength += +options.knownLength;
+        valueLength += Number(options.knownLength);
       } else if (Buffer.isBuffer(value)) {
         valueLength = value.length;
       } else if (typeof value === "string") {
@@ -37373,7 +37376,7 @@ var require_form_data = __commonJS({
       }
       this._valueLength += valueLength;
       this._overheadLength += Buffer.byteLength(header) + FormData3.LINE_BREAK.length;
-      if (!value || !value.path && !(value.readable && Object.prototype.hasOwnProperty.call(value, "httpVersion")) && !(value instanceof Stream)) {
+      if (!value || !value.path && !(value.readable && hasOwn(value, "httpVersion")) && !(value instanceof Stream)) {
         return;
       }
       if (!options.knownLength) {
@@ -37381,26 +37384,25 @@ var require_form_data = __commonJS({
       }
     };
     FormData3.prototype._lengthRetriever = function(value, callback) {
-      if (Object.prototype.hasOwnProperty.call(value, "fd")) {
+      if (hasOwn(value, "fd")) {
         if (value.end != void 0 && value.end != Infinity && value.start != void 0) {
           callback(null, value.end + 1 - (value.start ? value.start : 0));
         } else {
           fs.stat(value.path, function(err, stat) {
-            var fileSize;
             if (err) {
               callback(err);
               return;
             }
-            fileSize = stat.size - (value.start ? value.start : 0);
+            var fileSize = stat.size - (value.start ? value.start : 0);
             callback(null, fileSize);
           });
         }
-      } else if (Object.prototype.hasOwnProperty.call(value, "httpVersion")) {
-        callback(null, +value.headers["content-length"]);
-      } else if (Object.prototype.hasOwnProperty.call(value, "httpModule")) {
+      } else if (hasOwn(value, "httpVersion")) {
+        callback(null, Number(value.headers["content-length"]));
+      } else if (hasOwn(value, "httpModule")) {
         value.on("response", function(response) {
           value.pause();
-          callback(null, +response.headers["content-length"]);
+          callback(null, Number(response.headers["content-length"]));
         });
         value.resume();
       } else {
@@ -37408,7 +37410,7 @@ var require_form_data = __commonJS({
       }
     };
     FormData3.prototype._multiPartHeader = function(field, value, options) {
-      if (typeof options.header == "string") {
+      if (typeof options.header === "string") {
         return options.header;
       }
       var contentDisposition = this._getContentDisposition(value, options);
@@ -37420,12 +37422,12 @@ var require_form_data = __commonJS({
         // if no content type. allow it to be empty array
         "Content-Type": [].concat(contentType || [])
       };
-      if (typeof options.header == "object") {
+      if (typeof options.header === "object") {
         populate(headers, options.header);
       }
       var header;
       for (var prop in headers) {
-        if (Object.prototype.hasOwnProperty.call(headers, prop)) {
+        if (hasOwn(headers, prop)) {
           header = headers[prop];
           if (header == null) {
             continue;
@@ -37441,34 +37443,33 @@ var require_form_data = __commonJS({
       return "--" + this.getBoundary() + FormData3.LINE_BREAK + contents + FormData3.LINE_BREAK;
     };
     FormData3.prototype._getContentDisposition = function(value, options) {
-      var filename, contentDisposition;
+      var filename;
       if (typeof options.filepath === "string") {
         filename = path2.normalize(options.filepath).replace(/\\/g, "/");
-      } else if (options.filename || value.name || value.path) {
-        filename = path2.basename(options.filename || value.name || value.path);
-      } else if (value.readable && Object.prototype.hasOwnProperty.call(value, "httpVersion")) {
+      } else if (options.filename || value && (value.name || value.path)) {
+        filename = path2.basename(options.filename || value && (value.name || value.path));
+      } else if (value && value.readable && hasOwn(value, "httpVersion")) {
         filename = path2.basename(value.client._httpMessage.path || "");
       }
       if (filename) {
-        contentDisposition = 'filename="' + filename + '"';
+        return 'filename="' + filename + '"';
       }
-      return contentDisposition;
     };
     FormData3.prototype._getContentType = function(value, options) {
       var contentType = options.contentType;
-      if (!contentType && value.name) {
+      if (!contentType && value && value.name) {
         contentType = mime.lookup(value.name);
       }
-      if (!contentType && value.path) {
+      if (!contentType && value && value.path) {
         contentType = mime.lookup(value.path);
       }
-      if (!contentType && value.readable && Object.prototype.hasOwnProperty.call(value, "httpVersion")) {
+      if (!contentType && value && value.readable && hasOwn(value, "httpVersion")) {
         contentType = value.headers["content-type"];
       }
       if (!contentType && (options.filepath || options.filename)) {
         contentType = mime.lookup(options.filepath || options.filename);
       }
-      if (!contentType && typeof value == "object") {
+      if (!contentType && value && typeof value === "object") {
         contentType = FormData3.DEFAULT_CONTENT_TYPE;
       }
       return contentType;
@@ -37492,13 +37493,16 @@ var require_form_data = __commonJS({
         "content-type": "multipart/form-data; boundary=" + this.getBoundary()
       };
       for (header in userHeaders) {
-        if (Object.prototype.hasOwnProperty.call(userHeaders, header)) {
+        if (hasOwn(userHeaders, header)) {
           formHeaders[header.toLowerCase()] = userHeaders[header];
         }
       }
       return formHeaders;
     };
     FormData3.prototype.setBoundary = function(boundary) {
+      if (typeof boundary !== "string") {
+        throw new TypeError("FormData boundary must be a string");
+      }
       this._boundary = boundary;
     };
     FormData3.prototype.getBoundary = function() {
@@ -37525,11 +37529,7 @@ var require_form_data = __commonJS({
       return Buffer.concat([dataBuffer, Buffer.from(this._lastBoundary())]);
     };
     FormData3.prototype._generateBoundary = function() {
-      var boundary = "--------------------------";
-      for (var i = 0; i < 24; i++) {
-        boundary += Math.floor(Math.random() * 10).toString(16);
-      }
-      this._boundary = boundary;
+      this._boundary = "--------------------------" + crypto2.randomBytes(12).toString("hex");
     };
     FormData3.prototype.getLengthSync = function() {
       var knownLength = this._overheadLength + this._valueLength;
@@ -37569,8 +37569,10 @@ var require_form_data = __commonJS({
       });
     };
     FormData3.prototype.submit = function(params, cb) {
-      var request, options, defaults2 = { method: "post" };
-      if (typeof params == "string") {
+      var request;
+      var options;
+      var defaults2 = { method: "post" };
+      if (typeof params === "string") {
         params = parseUrl(params);
         options = populate({
           port: params.port,
@@ -37581,11 +37583,11 @@ var require_form_data = __commonJS({
       } else {
         options = populate(params, defaults2);
         if (!options.port) {
-          options.port = options.protocol == "https:" ? 443 : 80;
+          options.port = options.protocol === "https:" ? 443 : 80;
         }
       }
       options.headers = this.getHeaders(params.headers);
-      if (options.protocol == "https:") {
+      if (options.protocol === "https:") {
         request = https2.request(options);
       } else {
         request = http3.request(options);
@@ -37624,6 +37626,7 @@ var require_form_data = __commonJS({
       return "[object FormData]";
     };
     setToStringTag(FormData3, "FormData");
+    module2.exports = FormData3;
   }
 });
 
