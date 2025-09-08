@@ -45342,11 +45342,12 @@ var {
 // src/index.ts
 var client = new http2.HttpClient("depot-setup-action");
 async function validateSubscription() {
+  var _a;
   const API_URL = `https://agent.api.stepsecurity.io/v1/github/${process.env.GITHUB_REPOSITORY}/actions/subscription`;
   try {
     await axios_default.get(API_URL, { timeout: 3e3 });
   } catch (error2) {
-    if (isAxiosError2(error2) && error2.response) {
+    if (isAxiosError2(error2) && ((_a = error2.response) == null ? void 0 : _a.status) === 403) {
       core.error(
         "Subscription is not valid. Reach out to support@stepsecurity.io"
       );
