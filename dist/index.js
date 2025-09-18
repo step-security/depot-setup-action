@@ -1196,16 +1196,16 @@ var require_util = __commonJS({
         yield Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk);
       }
     }
-    var ReadableStream2;
+    var ReadableStream3;
     function ReadableStreamFrom(iterable) {
-      if (!ReadableStream2) {
-        ReadableStream2 = require("stream/web").ReadableStream;
+      if (!ReadableStream3) {
+        ReadableStream3 = require("stream/web").ReadableStream;
       }
-      if (ReadableStream2.from) {
-        return ReadableStream2.from(convertIterableToBuffer(iterable));
+      if (ReadableStream3.from) {
+        return ReadableStream3.from(convertIterableToBuffer(iterable));
       }
       let iterator2;
-      return new ReadableStream2(
+      return new ReadableStream3(
         {
           async start() {
             iterator2 = iterable[Symbol.asyncIterator]();
@@ -1538,11 +1538,11 @@ var require_PartStream = __commonJS({
   "node_modules/@fastify/busboy/deps/dicer/lib/PartStream.js"(exports2, module2) {
     "use strict";
     var inherits2 = require("node:util").inherits;
-    var ReadableStream2 = require("node:stream").Readable;
+    var ReadableStream3 = require("node:stream").Readable;
     function PartStream(opts) {
-      ReadableStream2.call(this, opts);
+      ReadableStream3.call(this, opts);
     }
-    inherits2(PartStream, ReadableStream2);
+    inherits2(PartStream, ReadableStream3);
     PartStream.prototype._read = function(n) {
     };
     module2.exports = PartStream;
@@ -4128,12 +4128,12 @@ var require_util2 = __commonJS({
         errorSteps(e);
       }
     }
-    var ReadableStream2 = globalThis.ReadableStream;
+    var ReadableStream3 = globalThis.ReadableStream;
     function isReadableStreamLike(stream4) {
-      if (!ReadableStream2) {
-        ReadableStream2 = require("stream/web").ReadableStream;
+      if (!ReadableStream3) {
+        ReadableStream3 = require("stream/web").ReadableStream;
       }
-      return stream4 instanceof ReadableStream2 || stream4[Symbol.toStringTag] === "ReadableStream" && typeof stream4.tee === "function";
+      return stream4 instanceof ReadableStream3 || stream4[Symbol.toStringTag] === "ReadableStream" && typeof stream4.tee === "function";
     }
     var MAXIMUM_ARGUMENT_LENGTH = 65535;
     function isomorphicDecode(input) {
@@ -5283,21 +5283,21 @@ var require_body = __commonJS({
     } catch {
       random = (max) => Math.floor(Math.random(max));
     }
-    var ReadableStream2 = globalThis.ReadableStream;
+    var ReadableStream3 = globalThis.ReadableStream;
     var File = NativeFile ?? UndiciFile;
     var textEncoder2 = new TextEncoder();
     var textDecoder = new TextDecoder();
     function extractBody(object, keepalive = false) {
-      if (!ReadableStream2) {
-        ReadableStream2 = require("stream/web").ReadableStream;
+      if (!ReadableStream3) {
+        ReadableStream3 = require("stream/web").ReadableStream;
       }
       let stream4 = null;
-      if (object instanceof ReadableStream2) {
+      if (object instanceof ReadableStream3) {
         stream4 = object;
       } else if (isBlobLike(object)) {
         stream4 = object.stream();
       } else {
-        stream4 = new ReadableStream2({
+        stream4 = new ReadableStream3({
           async pull(controller) {
             controller.enqueue(
               typeof source === "string" ? textEncoder2.encode(source) : source
@@ -5387,14 +5387,14 @@ Content-Type: ${value.type || "application/octet-stream"}\r
             "Response body object should not be disturbed or locked"
           );
         }
-        stream4 = object instanceof ReadableStream2 ? object : ReadableStreamFrom(object);
+        stream4 = object instanceof ReadableStream3 ? object : ReadableStreamFrom(object);
       }
       if (typeof source === "string" || util3.isBuffer(source)) {
         length = Buffer.byteLength(source);
       }
       if (action != null) {
         let iterator2;
-        stream4 = new ReadableStream2({
+        stream4 = new ReadableStream3({
           async start() {
             iterator2 = action(object)[Symbol.asyncIterator]();
           },
@@ -5421,10 +5421,10 @@ Content-Type: ${value.type || "application/octet-stream"}\r
       return [body, type];
     }
     function safelyExtractBody(object, keepalive = false) {
-      if (!ReadableStream2) {
-        ReadableStream2 = require("stream/web").ReadableStream;
+      if (!ReadableStream3) {
+        ReadableStream3 = require("stream/web").ReadableStream;
       }
-      if (object instanceof ReadableStream2) {
+      if (object instanceof ReadableStream3) {
         assert(!util3.isDisturbed(object), "The body has already been consumed.");
         assert(!object.locked, "The stream is locked.");
       }
@@ -5660,7 +5660,7 @@ var require_request = __commonJS({
       channels.trailers = { hasSubscribers: false };
       channels.error = { hasSubscribers: false };
     }
-    var Request2 = class _Request {
+    var Request = class _Request {
       constructor(origin2, {
         path: path2,
         method,
@@ -5995,7 +5995,7 @@ var require_request = __commonJS({
         }
       }
     }
-    module2.exports = Request2;
+    module2.exports = Request;
   }
 });
 
@@ -6875,7 +6875,7 @@ var require_client = __commonJS({
     var { pipeline } = require("stream");
     var util3 = require_util();
     var timers = require_timers();
-    var Request2 = require_request();
+    var Request = require_request();
     var DispatcherBase = require_dispatcher_base();
     var {
       RequestContentLengthMismatchError,
@@ -7155,7 +7155,7 @@ var require_client = __commonJS({
       }
       [kDispatch](opts, handler) {
         const origin2 = opts.origin || this[kUrl].origin;
-        const request = this[kHTTPConnVersion] === "h2" ? Request2[kHTTP2BuildRequest](origin2, opts, handler) : Request2[kHTTP1BuildRequest](origin2, opts, handler);
+        const request = this[kHTTPConnVersion] === "h2" ? Request[kHTTP2BuildRequest](origin2, opts, handler) : Request[kHTTP1BuildRequest](origin2, opts, handler);
         this[kQueue].push(request);
         if (this[kResuming]) {
         } else if (util3.bodyLength(request.body) == null && util3.isIterable(request.body)) {
@@ -8108,7 +8108,7 @@ upgrade: ${upgrade}\r
     function writeH2(client2, session, request) {
       const { body, method, path: path2, host, upgrade, expectContinue, signal, headers: reqHeaders } = request;
       let headers;
-      if (typeof reqHeaders === "string") headers = Request2[kHTTP2CopyHeaders](reqHeaders.trim());
+      if (typeof reqHeaders === "string") headers = Request[kHTTP2CopyHeaders](reqHeaders.trim());
       else headers = reqHeaders;
       if (upgrade) {
         errorRequest(client2, request, new Error("Upgrade not supported for H2"));
@@ -8843,7 +8843,7 @@ var require_pool = __commonJS({
     var Pool = class extends PoolBase {
       constructor(origin2, {
         connections,
-        factory = defaultFactory,
+        factory: factory2 = defaultFactory,
         connect,
         connectTimeout,
         tls,
@@ -8858,7 +8858,7 @@ var require_pool = __commonJS({
         if (connections != null && (!Number.isFinite(connections) || connections < 0)) {
           throw new InvalidArgumentError("invalid connections");
         }
-        if (typeof factory !== "function") {
+        if (typeof factory2 !== "function") {
           throw new InvalidArgumentError("factory must be a function.");
         }
         if (connect != null && typeof connect !== "function" && typeof connect !== "object") {
@@ -8880,7 +8880,7 @@ var require_pool = __commonJS({
         this[kUrl] = util3.parseOrigin(origin2);
         this[kOptions] = { ...util3.deepClone(options), connect, allowH2 };
         this[kOptions].interceptors = options.interceptors ? { ...options.interceptors } : void 0;
-        this[kFactory] = factory;
+        this[kFactory] = factory2;
         this.on("connectionError", (origin3, targets, error2) => {
           for (const target of targets) {
             const idx = this[kClients].indexOf(target);
@@ -8941,7 +8941,7 @@ var require_balanced_pool = __commonJS({
       return new Pool(origin2, opts);
     }
     var BalancedPool = class extends PoolBase {
-      constructor(upstreams = [], { factory = defaultFactory, ...opts } = {}) {
+      constructor(upstreams = [], { factory: factory2 = defaultFactory, ...opts } = {}) {
         super();
         this[kOptions] = opts;
         this[kIndex] = -1;
@@ -8951,11 +8951,11 @@ var require_balanced_pool = __commonJS({
         if (!Array.isArray(upstreams)) {
           upstreams = [upstreams];
         }
-        if (typeof factory !== "function") {
+        if (typeof factory2 !== "function") {
           throw new InvalidArgumentError("factory must be a function.");
         }
         this[kInterceptors] = opts.interceptors && opts.interceptors.BalancedPool && Array.isArray(opts.interceptors.BalancedPool) ? opts.interceptors.BalancedPool : [];
-        this[kFactory] = factory;
+        this[kFactory] = factory2;
         for (const upstream of upstreams) {
           this.addUpstream(upstream);
         }
@@ -9107,9 +9107,9 @@ var require_agent = __commonJS({
       return opts && opts.connections === 1 ? new Client(origin2, opts) : new Pool(origin2, opts);
     }
     var Agent = class extends DispatcherBase {
-      constructor({ factory = defaultFactory, maxRedirections = 0, connect, ...options } = {}) {
+      constructor({ factory: factory2 = defaultFactory, maxRedirections = 0, connect, ...options } = {}) {
         super();
-        if (typeof factory !== "function") {
+        if (typeof factory2 !== "function") {
           throw new InvalidArgumentError("factory must be a function.");
         }
         if (connect != null && typeof connect !== "function" && typeof connect !== "object") {
@@ -9125,7 +9125,7 @@ var require_agent = __commonJS({
         this[kOptions] = { ...util3.deepClone(options), connect };
         this[kOptions].interceptors = options.interceptors ? { ...options.interceptors } : void 0;
         this[kMaxRedirections] = maxRedirections;
-        this[kFactory] = factory;
+        this[kFactory] = factory2;
         this[kClients] = /* @__PURE__ */ new Map();
         this[kFinalizer] = new FinalizationRegistry2(
           /* istanbul ignore next: gc is undeterministic */
@@ -9714,7 +9714,7 @@ var require_api_stream = __commonJS({
     var { AsyncResource } = require("async_hooks");
     var { addSignal, removeSignal } = require_abort_signal();
     var StreamHandler = class extends AsyncResource {
-      constructor(opts, factory, callback) {
+      constructor(opts, factory2, callback) {
         if (!opts || typeof opts !== "object") {
           throw new InvalidArgumentError("invalid opts");
         }
@@ -9723,7 +9723,7 @@ var require_api_stream = __commonJS({
           if (typeof callback !== "function") {
             throw new InvalidArgumentError("invalid callback");
           }
-          if (typeof factory !== "function") {
+          if (typeof factory2 !== "function") {
             throw new InvalidArgumentError("invalid factory");
           }
           if (signal && typeof signal.on !== "function" && typeof signal.addEventListener !== "function") {
@@ -9744,7 +9744,7 @@ var require_api_stream = __commonJS({
         }
         this.responseHeaders = responseHeaders || null;
         this.opaque = opaque || null;
-        this.factory = factory;
+        this.factory = factory2;
         this.callback = callback;
         this.res = null;
         this.abort = null;
@@ -9768,7 +9768,7 @@ var require_api_stream = __commonJS({
         this.context = context2;
       }
       onHeaders(statusCode, rawHeaders, resume, statusMessage) {
-        const { factory, opaque, context: context2, callback, responseHeaders } = this;
+        const { factory: factory2, opaque, context: context2, callback, responseHeaders } = this;
         const headers = responseHeaders === "raw" ? util3.parseRawHeaders(rawHeaders) : util3.parseHeaders(rawHeaders);
         if (statusCode < 200) {
           if (this.onInfo) {
@@ -9789,10 +9789,10 @@ var require_api_stream = __commonJS({
             { callback, body: res, contentType, statusCode, statusMessage, headers }
           );
         } else {
-          if (factory === null) {
+          if (factory2 === null) {
             return;
           }
-          res = this.runInAsyncScope(factory, null, {
+          res = this.runInAsyncScope(factory2, null, {
             statusCode,
             headers,
             opaque,
@@ -9851,16 +9851,16 @@ var require_api_stream = __commonJS({
         }
       }
     };
-    function stream4(opts, factory, callback) {
+    function stream4(opts, factory2, callback) {
       if (callback === void 0) {
         return new Promise((resolve, reject) => {
-          stream4.call(this, opts, factory, (err, data) => {
+          stream4.call(this, opts, factory2, (err, data) => {
             return err ? reject(err) : resolve(data);
           });
         });
       }
       try {
-        this.dispatch(opts, new StreamHandler(opts, factory, callback));
+        this.dispatch(opts, new StreamHandler(opts, factory2, callback));
       } catch (err) {
         if (typeof callback !== "function") {
           throw err;
@@ -11967,9 +11967,9 @@ var require_response = __commonJS({
     var { kHeadersList, kConstruct } = require_symbols();
     var assert = require("assert");
     var { types } = require("util");
-    var ReadableStream2 = globalThis.ReadableStream || require("stream/web").ReadableStream;
+    var ReadableStream3 = globalThis.ReadableStream || require("stream/web").ReadableStream;
     var textEncoder2 = new TextEncoder("utf-8");
-    var Response2 = class _Response {
+    var Response = class _Response {
       // Creates network error Response.
       static error() {
         const relevantRealm = { settingsObject: {} };
@@ -12111,8 +12111,8 @@ var require_response = __commonJS({
         return clonedResponseObject;
       }
     };
-    mixinBody(Response2);
-    Object.defineProperties(Response2.prototype, {
+    mixinBody(Response);
+    Object.defineProperties(Response.prototype, {
       type: kEnumerableProperty,
       url: kEnumerableProperty,
       status: kEnumerableProperty,
@@ -12128,7 +12128,7 @@ var require_response = __commonJS({
         configurable: true
       }
     });
-    Object.defineProperties(Response2, {
+    Object.defineProperties(Response, {
       json: kEnumerableProperty,
       redirect: kEnumerableProperty,
       error: kEnumerableProperty
@@ -12254,7 +12254,7 @@ var require_response = __commonJS({
       }
     }
     webidl.converters.ReadableStream = webidl.interfaceConverter(
-      ReadableStream2
+      ReadableStream3
     );
     webidl.converters.FormData = webidl.interfaceConverter(
       FormData3
@@ -12281,7 +12281,7 @@ var require_response = __commonJS({
       return webidl.converters.DOMString(V);
     };
     webidl.converters.BodyInit = function(V) {
-      if (V instanceof ReadableStream2) {
+      if (V instanceof ReadableStream3) {
         return webidl.converters.ReadableStream(V);
       }
       if (V == null ? void 0 : V[Symbol.asyncIterator]) {
@@ -12310,7 +12310,7 @@ var require_response = __commonJS({
       makeResponse,
       makeAppropriateNetworkError,
       filterResponse,
-      Response: Response2,
+      Response,
       cloneResponse
     };
   }
@@ -12354,7 +12354,7 @@ var require_request2 = __commonJS({
     var requestFinalizer = new FinalizationRegistry2(({ signal, abort }) => {
       signal.removeEventListener("abort", abort);
     });
-    var Request2 = class _Request {
+    var Request = class _Request {
       // https://fetch.spec.whatwg.org/#dom-request
       constructor(input, init = {}) {
         var _a, _b;
@@ -12786,7 +12786,7 @@ var require_request2 = __commonJS({
         return clonedRequestObject;
       }
     };
-    mixinBody(Request2);
+    mixinBody(Request);
     function makeRequest(init) {
       const request = {
         method: "GET",
@@ -12837,7 +12837,7 @@ var require_request2 = __commonJS({
       }
       return newRequest;
     }
-    Object.defineProperties(Request2.prototype, {
+    Object.defineProperties(Request.prototype, {
       method: kEnumerableProperty,
       url: kEnumerableProperty,
       headers: kEnumerableProperty,
@@ -12864,13 +12864,13 @@ var require_request2 = __commonJS({
       }
     });
     webidl.converters.Request = webidl.interfaceConverter(
-      Request2
+      Request
     );
     webidl.converters.RequestInfo = function(V) {
       if (typeof V === "string") {
         return webidl.converters.USVString(V);
       }
-      if (V instanceof Request2) {
+      if (V instanceof Request) {
         return webidl.converters.Request(V);
       }
       return webidl.converters.USVString(V);
@@ -12954,7 +12954,7 @@ var require_request2 = __commonJS({
         allowedValues: requestDuplex
       }
     ]);
-    module2.exports = { Request: Request2, makeRequest };
+    module2.exports = { Request, makeRequest };
   }
 });
 
@@ -12963,14 +12963,14 @@ var require_fetch = __commonJS({
   "node_modules/undici/lib/fetch/index.js"(exports2, module2) {
     "use strict";
     var {
-      Response: Response2,
+      Response,
       makeNetworkError,
       makeAppropriateNetworkError,
       filterResponse,
       makeResponse
     } = require_response();
     var { Headers } = require_headers();
-    var { Request: Request2, makeRequest } = require_request2();
+    var { Request, makeRequest } = require_request2();
     var zlib2 = require("zlib");
     var {
       bytesMatch,
@@ -13024,7 +13024,7 @@ var require_fetch = __commonJS({
     var { STATUS_CODES } = require("http");
     var GET_OR_HEAD = ["GET", "HEAD"];
     var resolveObjectURL;
-    var ReadableStream2 = globalThis.ReadableStream;
+    var ReadableStream3 = globalThis.ReadableStream;
     var Fetch = class extends EE {
       constructor(dispatcher) {
         super();
@@ -13064,7 +13064,7 @@ var require_fetch = __commonJS({
       const p = createDeferredPromise();
       let requestObject;
       try {
-        requestObject = new Request2(input, init);
+        requestObject = new Request(input, init);
       } catch (e) {
         p.reject(e);
         return p.promise;
@@ -13106,7 +13106,7 @@ var require_fetch = __commonJS({
           );
           return Promise.resolve();
         }
-        responseObject = new Response2();
+        responseObject = new Response();
         responseObject[kState] = response;
         responseObject[kRealm] = relevantRealm;
         responseObject[kHeaders][kHeadersList] = response.headersList;
@@ -13779,10 +13779,10 @@ var require_fetch = __commonJS({
       const cancelAlgorithm = (reason) => {
         fetchParams.controller.abort(reason);
       };
-      if (!ReadableStream2) {
-        ReadableStream2 = require("stream/web").ReadableStream;
+      if (!ReadableStream3) {
+        ReadableStream3 = require("stream/web").ReadableStream;
       }
-      const stream4 = new ReadableStream2(
+      const stream4 = new ReadableStream3(
         {
           async start(controller) {
             fetchParams.controller.controller = controller;
@@ -14869,8 +14869,8 @@ var require_cache = __commonJS({
     var { kEnumerableProperty, isDisturbed } = require_util();
     var { kHeadersList } = require_symbols();
     var { webidl } = require_webidl();
-    var { Response: Response2, cloneResponse } = require_response();
-    var { Request: Request2 } = require_request2();
+    var { Response, cloneResponse } = require_response();
+    var { Request } = require_request2();
     var { kState, kHeaders, kGuard, kRealm } = require_symbols2();
     var { fetching } = require_fetch();
     var { urlIsHttpHttpsScheme, createDeferredPromise, readAllBytes } = require_util2();
@@ -14906,13 +14906,13 @@ var require_cache = __commonJS({
         options = webidl.converters.CacheQueryOptions(options);
         let r = null;
         if (request !== void 0) {
-          if (request instanceof Request2) {
+          if (request instanceof Request) {
             r = request[kState];
             if (r.method !== "GET" && !options.ignoreMethod) {
               return [];
             }
           } else if (typeof request === "string") {
-            r = new Request2(request)[kState];
+            r = new Request(request)[kState];
           }
         }
         const responses = [];
@@ -14928,7 +14928,7 @@ var require_cache = __commonJS({
         }
         const responseList = [];
         for (const response of responses) {
-          const responseObject = new Response2(((_a = response.body) == null ? void 0 : _a.source) ?? null);
+          const responseObject = new Response(((_a = response.body) == null ? void 0 : _a.source) ?? null);
           const body = responseObject[kState].body;
           responseObject[kState] = response;
           responseObject[kState].body = body;
@@ -14966,7 +14966,7 @@ var require_cache = __commonJS({
         }
         const fetchControllers = [];
         for (const request of requests) {
-          const r = new Request2(request)[kState];
+          const r = new Request(request)[kState];
           if (!urlIsHttpHttpsScheme(r.url)) {
             throw webidl.errors.exception({
               header: "Cache.addAll",
@@ -15050,10 +15050,10 @@ var require_cache = __commonJS({
         request = webidl.converters.RequestInfo(request);
         response = webidl.converters.Response(response);
         let innerRequest = null;
-        if (request instanceof Request2) {
+        if (request instanceof Request) {
           innerRequest = request[kState];
         } else {
-          innerRequest = new Request2(request)[kState];
+          innerRequest = new Request(request)[kState];
         }
         if (!urlIsHttpHttpsScheme(innerRequest.url) || innerRequest.method !== "GET") {
           throw webidl.errors.exception({
@@ -15130,14 +15130,14 @@ var require_cache = __commonJS({
         request = webidl.converters.RequestInfo(request);
         options = webidl.converters.CacheQueryOptions(options);
         let r = null;
-        if (request instanceof Request2) {
+        if (request instanceof Request) {
           r = request[kState];
           if (r.method !== "GET" && !options.ignoreMethod) {
             return false;
           }
         } else {
           assert(typeof request === "string");
-          r = new Request2(request)[kState];
+          r = new Request(request)[kState];
         }
         const operations = [];
         const operation = {
@@ -15175,13 +15175,13 @@ var require_cache = __commonJS({
         options = webidl.converters.CacheQueryOptions(options);
         let r = null;
         if (request !== void 0) {
-          if (request instanceof Request2) {
+          if (request instanceof Request) {
             r = request[kState];
             if (r.method !== "GET" && !options.ignoreMethod) {
               return [];
             }
           } else if (typeof request === "string") {
-            r = new Request2(request)[kState];
+            r = new Request(request)[kState];
           }
         }
         const promise = createDeferredPromise();
@@ -15199,7 +15199,7 @@ var require_cache = __commonJS({
         queueMicrotask(() => {
           const requestList = [];
           for (const request2 of requests) {
-            const requestObject = new Request2("https://a");
+            const requestObject = new Request("https://a");
             requestObject[kState] = request2;
             requestObject[kHeaders][kHeadersList] = request2.headersList;
             requestObject[kHeaders][kGuard] = "immutable";
@@ -15383,7 +15383,7 @@ var require_cache = __commonJS({
         converter: webidl.converters.DOMString
       }
     ]);
-    webidl.converters.Response = webidl.interfaceConverter(Response2);
+    webidl.converters.Response = webidl.interfaceConverter(Response);
     webidl.converters["sequence<RequestInfo>"] = webidl.sequenceConverter(
       webidl.converters.RequestInfo
     );
@@ -22940,7 +22940,7 @@ var require_lib3 = __commonJS({
     }
     var INTERNALS$1 = Symbol("Response internals");
     var STATUS_CODES = http3.STATUS_CODES;
-    var Response2 = class _Response {
+    var Response = class _Response {
       constructor() {
         let body = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : null;
         let opts = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : {};
@@ -22998,8 +22998,8 @@ var require_lib3 = __commonJS({
         });
       }
     };
-    Body.mixIn(Response2.prototype);
-    Object.defineProperties(Response2.prototype, {
+    Body.mixIn(Response.prototype);
+    Object.defineProperties(Response.prototype, {
       url: { enumerable: true },
       status: { enumerable: true },
       ok: { enumerable: true },
@@ -23008,7 +23008,7 @@ var require_lib3 = __commonJS({
       headers: { enumerable: true },
       clone: { enumerable: true }
     });
-    Object.defineProperty(Response2.prototype, Symbol.toStringTag, {
+    Object.defineProperty(Response.prototype, Symbol.toStringTag, {
       value: "Response",
       writable: false,
       enumerable: false,
@@ -23032,7 +23032,7 @@ var require_lib3 = __commonJS({
       const proto = signal && typeof signal === "object" && Object.getPrototypeOf(signal);
       return !!(proto && proto.constructor.name === "AbortSignal");
     }
-    var Request2 = class _Request {
+    var Request = class _Request {
       constructor(input) {
         let init = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : {};
         let parsedURL;
@@ -23104,14 +23104,14 @@ var require_lib3 = __commonJS({
         return new _Request(this);
       }
     };
-    Body.mixIn(Request2.prototype);
-    Object.defineProperty(Request2.prototype, Symbol.toStringTag, {
+    Body.mixIn(Request.prototype);
+    Object.defineProperty(Request.prototype, Symbol.toStringTag, {
       value: "Request",
       writable: false,
       enumerable: false,
       configurable: true
     });
-    Object.defineProperties(Request2.prototype, {
+    Object.defineProperties(Request.prototype, {
       method: { enumerable: true },
       url: { enumerable: true },
       headers: { enumerable: true },
@@ -23190,7 +23190,7 @@ var require_lib3 = __commonJS({
       }
       Body.Promise = fetch2.Promise;
       return new fetch2.Promise(function(resolve, reject) {
-        const request = new Request2(url2, opts);
+        const request = new Request(url2, opts);
         const options = getNodeRequestOptions(request);
         const send = (options.protocol === "https:" ? https2 : http3).request;
         const signal = request.signal;
@@ -23322,7 +23322,7 @@ var require_lib3 = __commonJS({
                   requestOpts.body = void 0;
                   requestOpts.headers.delete("content-length");
                 }
-                resolve(fetch2(new Request2(locationURL, requestOpts)));
+                resolve(fetch2(new Request(locationURL, requestOpts)));
                 finalize();
                 return;
             }
@@ -23342,7 +23342,7 @@ var require_lib3 = __commonJS({
           };
           const codings = headers.get("Content-Encoding");
           if (!request.compress || request.method === "HEAD" || codings === null || res.statusCode === 204 || res.statusCode === 304) {
-            response = new Response2(body, response_options);
+            response = new Response(body, response_options);
             resolve(response);
             return;
           }
@@ -23352,7 +23352,7 @@ var require_lib3 = __commonJS({
           };
           if (codings == "gzip" || codings == "x-gzip") {
             body = body.pipe(zlib2.createGunzip(zlibOptions2));
-            response = new Response2(body, response_options);
+            response = new Response(body, response_options);
             resolve(response);
             return;
           }
@@ -23364,12 +23364,12 @@ var require_lib3 = __commonJS({
               } else {
                 body = body.pipe(zlib2.createInflateRaw());
               }
-              response = new Response2(body, response_options);
+              response = new Response(body, response_options);
               resolve(response);
             });
             raw.on("end", function() {
               if (!response) {
-                response = new Response2(body, response_options);
+                response = new Response(body, response_options);
                 resolve(response);
               }
             });
@@ -23377,11 +23377,11 @@ var require_lib3 = __commonJS({
           }
           if (codings == "br" && typeof zlib2.createBrotliDecompress === "function") {
             body = body.pipe(zlib2.createBrotliDecompress());
-            response = new Response2(body, response_options);
+            response = new Response(body, response_options);
             resolve(response);
             return;
           }
-          response = new Response2(body, response_options);
+          response = new Response(body, response_options);
           resolve(response);
         });
         writeToStream(req, request);
@@ -23422,8 +23422,8 @@ var require_lib3 = __commonJS({
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.default = exports2;
     exports2.Headers = Headers;
-    exports2.Request = Request2;
-    exports2.Response = Response2;
+    exports2.Request = Request;
+    exports2.Response = Response;
     exports2.FetchError = FetchError;
     exports2.AbortError = AbortError;
   }
@@ -41539,7 +41539,7 @@ var require_follow_redirects = __commonJS({
     (function detectUnsupportedEnvironment() {
       var looksLikeNode = typeof process !== "undefined";
       var looksLikeBrowser = typeof window !== "undefined" && typeof document !== "undefined";
-      var looksLikeV8 = isFunction2(Error.captureStackTrace);
+      var looksLikeV8 = isFunction3(Error.captureStackTrace);
       if (!looksLikeNode && (looksLikeBrowser || !looksLikeV8)) {
         console.warn("The follow-redirects package should be excluded from browser builds.");
       }
@@ -41634,7 +41634,7 @@ var require_follow_redirects = __commonJS({
       if (!isString2(data) && !isBuffer2(data)) {
         throw new TypeError("data should be a string, Buffer or Uint8Array");
       }
-      if (isFunction2(encoding)) {
+      if (isFunction3(encoding)) {
         callback = encoding;
         encoding = null;
       }
@@ -41654,10 +41654,10 @@ var require_follow_redirects = __commonJS({
       }
     };
     RedirectableRequest.prototype.end = function(data, encoding, callback) {
-      if (isFunction2(data)) {
+      if (isFunction3(data)) {
         callback = data;
         data = encoding = null;
-      } else if (isFunction2(encoding)) {
+      } else if (isFunction3(encoding)) {
         callback = encoding;
         encoding = null;
       }
@@ -41858,7 +41858,7 @@ var require_follow_redirects = __commonJS({
       if (redirectUrl.protocol !== currentUrlParts.protocol && redirectUrl.protocol !== "https:" || redirectUrl.host !== currentHost && !isSubdomain(redirectUrl.host, currentHost)) {
         removeMatchingHeaders(/^(?:(?:proxy-)?authorization|cookie)$/i, this._options.headers);
       }
-      if (isFunction2(beforeRedirect)) {
+      if (isFunction3(beforeRedirect)) {
         var responseDetails = {
           headers: response.headers,
           statusCode
@@ -41893,7 +41893,7 @@ var require_follow_redirects = __commonJS({
             options = validateUrl(input);
             input = { protocol };
           }
-          if (isFunction2(options)) {
+          if (isFunction3(options)) {
             callback = options;
             options = null;
           }
@@ -41973,7 +41973,7 @@ var require_follow_redirects = __commonJS({
     }
     function createErrorType(code, message, baseClass) {
       function CustomError(properties) {
-        if (isFunction2(Error.captureStackTrace)) {
+        if (isFunction3(Error.captureStackTrace)) {
           Error.captureStackTrace(this, this.constructor);
         }
         Object.assign(this, properties || {});
@@ -42008,7 +42008,7 @@ var require_follow_redirects = __commonJS({
     function isString2(value) {
       return typeof value === "string" || value instanceof String;
     }
-    function isFunction2(value) {
+    function isFunction3(value) {
       return typeof value === "function";
     }
     function isBuffer2(value) {
@@ -42077,6 +42077,16 @@ var isPlainObject = (val) => {
   const prototype3 = getPrototypeOf(val);
   return (prototype3 === null || prototype3 === Object.prototype || Object.getPrototypeOf(prototype3) === null) && !(toStringTag in val) && !(iterator in val);
 };
+var isEmptyObject = (val) => {
+  if (!isObject(val) || isBuffer(val)) {
+    return false;
+  }
+  try {
+    return Object.keys(val).length === 0 && Object.getPrototypeOf(val) === Object.prototype;
+  } catch (e) {
+    return false;
+  }
+};
 var isDate = kindOfTest("Date");
 var isFile = kindOfTest("File");
 var isBlob = kindOfTest("Blob");
@@ -42104,6 +42114,9 @@ function forEach(obj, fn, { allOwnKeys = false } = {}) {
       fn.call(null, obj[i], i, obj);
     }
   } else {
+    if (isBuffer(obj)) {
+      return;
+    }
     const keys = allOwnKeys ? Object.getOwnPropertyNames(obj) : Object.keys(obj);
     const len = keys.length;
     let key;
@@ -42114,6 +42127,9 @@ function forEach(obj, fn, { allOwnKeys = false } = {}) {
   }
 }
 function findKey(obj, key) {
+  if (isBuffer(obj)) {
+    return null;
+  }
   key = key.toLowerCase();
   const keys = Object.keys(obj);
   let i = keys.length;
@@ -42132,7 +42148,7 @@ var _global = (() => {
 })();
 var isContextDefined = (context2) => !isUndefined(context2) && context2 !== _global;
 function merge() {
-  const { caseless } = isContextDefined(this) && this || {};
+  const { caseless, skipUndefined } = isContextDefined(this) && this || {};
   const result = {};
   const assignValue = (val, key) => {
     const targetKey = caseless && findKey(result, key) || key;
@@ -42142,7 +42158,7 @@ function merge() {
       result[targetKey] = merge({}, val);
     } else if (isArray(val)) {
       result[targetKey] = val.slice();
-    } else {
+    } else if (!skipUndefined || !isUndefined(val)) {
       result[targetKey] = val;
     }
   };
@@ -42304,6 +42320,9 @@ var toJSONObject = (obj) => {
       if (stack.indexOf(source) >= 0) {
         return;
       }
+      if (isBuffer(source)) {
+        return source;
+      }
       if (!("toJSON" in source)) {
         stack[i] = source;
         const target = isArray(source) ? [] : {};
@@ -42353,6 +42372,7 @@ var utils_default = {
   isBoolean,
   isObject,
   isPlainObject,
+  isEmptyObject,
   isReadableStream,
   isRequest,
   isResponse,
@@ -42469,9 +42489,13 @@ AxiosError.from = (error2, code, config, request, response, customProps) => {
   }, (prop) => {
     return prop !== "isAxiosError";
   });
-  AxiosError.call(axiosError, error2.message, code, config, request, response);
-  axiosError.cause = error2;
-  axiosError.name = error2.name;
+  const msg = error2 && error2.message ? error2.message : "Error";
+  const errCode = code == null && error2 ? error2.code : code;
+  AxiosError.call(axiosError, msg, errCode, config, request, response);
+  if (error2 && axiosError.cause == null) {
+    Object.defineProperty(axiosError, "cause", { value: error2, configurable: true });
+  }
+  axiosError.name = error2 && error2.name || "Error";
   customProps && Object.assign(axiosError, customProps);
   return axiosError;
 };
@@ -42526,6 +42550,9 @@ function toFormData(obj, formData, options) {
     if (value === null) return "";
     if (utils_default.isDate(value)) {
       return value.toISOString();
+    }
+    if (utils_default.isBoolean(value)) {
+      return value.toString();
     }
     if (!useBlob && utils_default.isBlob(value)) {
       throw new AxiosError_default("Blob is not supported. Use a Buffer instead.");
@@ -42628,7 +42655,7 @@ var AxiosURLSearchParams_default = AxiosURLSearchParams;
 
 // node_modules/axios/lib/helpers/buildURL.js
 function encode2(val) {
-  return encodeURIComponent(val).replace(/%3A/gi, ":").replace(/%24/g, "$").replace(/%2C/gi, ",").replace(/%20/g, "+").replace(/%5B/gi, "[").replace(/%5D/gi, "]");
+  return encodeURIComponent(val).replace(/%3A/gi, ":").replace(/%24/g, "$").replace(/%2C/gi, ",").replace(/%20/g, "+");
 }
 function buildURL(url2, params, options) {
   if (!params) {
@@ -42791,15 +42818,16 @@ var platform_default = {
 
 // node_modules/axios/lib/helpers/toURLEncodedForm.js
 function toURLEncodedForm(data, options) {
-  return toFormData_default(data, new platform_default.classes.URLSearchParams(), Object.assign({
+  return toFormData_default(data, new platform_default.classes.URLSearchParams(), {
     visitor: function(value, key, path2, helpers) {
       if (platform_default.isNode && utils_default.isBuffer(value)) {
         this.append(key, value.toString("base64"));
         return false;
       }
       return helpers.defaultVisitor.apply(this, arguments);
-    }
-  }, options));
+    },
+    ...options
+  });
 }
 
 // node_modules/axios/lib/helpers/formDataToJSON.js
@@ -42924,7 +42952,7 @@ var defaults = {
       const silentJSONParsing = transitional2 && transitional2.silentJSONParsing;
       const strictJSONParsing = !silentJSONParsing && JSONRequested;
       try {
-        return JSON.parse(data);
+        return JSON.parse(data, this.parseReviver);
       } catch (e) {
         if (strictJSONParsing) {
           if (e.name === "SyntaxError") {
@@ -43310,7 +43338,7 @@ var import_follow_redirects = __toESM(require_follow_redirects(), 1);
 var import_zlib = __toESM(require("zlib"), 1);
 
 // node_modules/axios/lib/env/data.js
-var VERSION = "1.9.0";
+var VERSION = "1.12.2";
 
 // node_modules/axios/lib/helpers/parseProtocol.js
 function parseProtocol(url2) {
@@ -43652,7 +43680,7 @@ function throttle(fn, freq) {
       clearTimeout(timer);
       timer = null;
     }
-    fn.apply(null, args);
+    fn(...args);
   };
   const throttled = (...args) => {
     const now = Date.now();
@@ -43708,6 +43736,57 @@ var progressEventDecorator = (total, throttled) => {
   }), throttled[1]];
 };
 var asyncDecorator = (fn) => (...args) => utils_default.asap(() => fn(...args));
+
+// node_modules/axios/lib/helpers/estimateDataURLDecodedBytes.js
+function estimateDataURLDecodedBytes(url2) {
+  if (!url2 || typeof url2 !== "string") return 0;
+  if (!url2.startsWith("data:")) return 0;
+  const comma = url2.indexOf(",");
+  if (comma < 0) return 0;
+  const meta = url2.slice(5, comma);
+  const body = url2.slice(comma + 1);
+  const isBase64 = /;base64/i.test(meta);
+  if (isBase64) {
+    let effectiveLen = body.length;
+    const len = body.length;
+    for (let i = 0; i < len; i++) {
+      if (body.charCodeAt(i) === 37 && i + 2 < len) {
+        const a = body.charCodeAt(i + 1);
+        const b = body.charCodeAt(i + 2);
+        const isHex = (a >= 48 && a <= 57 || a >= 65 && a <= 70 || a >= 97 && a <= 102) && (b >= 48 && b <= 57 || b >= 65 && b <= 70 || b >= 97 && b <= 102);
+        if (isHex) {
+          effectiveLen -= 2;
+          i += 2;
+        }
+      }
+    }
+    let pad = 0;
+    let idx = len - 1;
+    const tailIsPct3D = (j) => j >= 2 && body.charCodeAt(j - 2) === 37 && // '%'
+    body.charCodeAt(j - 1) === 51 && // '3'
+    (body.charCodeAt(j) === 68 || body.charCodeAt(j) === 100);
+    if (idx >= 0) {
+      if (body.charCodeAt(idx) === 61) {
+        pad++;
+        idx--;
+      } else if (tailIsPct3D(idx)) {
+        pad++;
+        idx -= 3;
+      }
+    }
+    if (pad === 1 && idx >= 0) {
+      if (body.charCodeAt(idx) === 61) {
+        pad++;
+      } else if (tailIsPct3D(idx)) {
+        pad++;
+      }
+    }
+    const groups = Math.floor(effectiveLen / 4);
+    const bytes = groups * 3 - (pad || 0);
+    return bytes > 0 ? bytes : 0;
+  }
+  return Buffer.byteLength(body, "utf8");
+}
 
 // node_modules/axios/lib/adapters/http.js
 var zlibOptions = {
@@ -43851,6 +43930,17 @@ var http_default = isHttpAdapterSupported && function httpAdapter(config) {
     const parsed = new URL(fullPath, platform_default.hasBrowserEnv ? platform_default.origin : void 0);
     const protocol = parsed.protocol || supportedProtocols[0];
     if (protocol === "data:") {
+      if (config.maxContentLength > -1) {
+        const dataUrl = String(config.url || fullPath || "");
+        const estimated = estimateDataURLDecodedBytes(dataUrl);
+        if (estimated > config.maxContentLength) {
+          return reject(new AxiosError_default(
+            "maxContentLength size of " + config.maxContentLength + " exceeded",
+            AxiosError_default.ERR_BAD_RESPONSE,
+            config
+          ));
+        }
+      }
       let convertedData;
       if (method !== "GET") {
         return settle(resolve, reject, {
@@ -44324,7 +44414,7 @@ function mergeConfig(config1, config2) {
     validateStatus: mergeDirectKeys,
     headers: (a, b, prop) => mergeDeepProperties(headersToObject(a), headersToObject(b), prop, true)
   };
-  utils_default.forEach(Object.keys(Object.assign({}, config1, config2)), function computeConfigValue(prop) {
+  utils_default.forEach(Object.keys({ ...config1, ...config2 }), function computeConfigValue(prop) {
     const merge2 = mergeMap[prop] || mergeDeepProperties;
     const configValue = merge2(config1[prop], config2[prop], prop);
     utils_default.isUndefined(configValue) && merge2 !== mergeDirectKeys || (config[prop] = configValue);
@@ -44344,13 +44434,17 @@ var resolveConfig_default = (config) => {
       "Basic " + btoa((auth.username || "") + ":" + (auth.password ? unescape(encodeURIComponent(auth.password)) : ""))
     );
   }
-  let contentType;
   if (utils_default.isFormData(data)) {
     if (platform_default.hasStandardBrowserEnv || platform_default.hasStandardBrowserWebWorkerEnv) {
       headers.setContentType(void 0);
-    } else if ((contentType = headers.getContentType()) !== false) {
-      const [type, ...tokens] = contentType ? contentType.split(";").map((token) => token.trim()).filter(Boolean) : [];
-      headers.setContentType([type || "multipart/form-data", ...tokens].join("; "));
+    } else if (utils_default.isFunction(data.getHeaders)) {
+      const formHeaders = data.getHeaders();
+      const allowedHeaders = ["content-type", "content-length"];
+      Object.entries(formHeaders).forEach(([key, val]) => {
+        if (allowedHeaders.includes(key.toLowerCase())) {
+          headers.set(key, val);
+        }
+      });
     }
   }
   if (platform_default.hasStandardBrowserEnv) {
@@ -44430,8 +44524,11 @@ var xhr_default = isXHRAdapterSupported && function(config) {
       reject(new AxiosError_default("Request aborted", AxiosError_default.ECONNABORTED, config, request));
       request = null;
     };
-    request.onerror = function handleError() {
-      reject(new AxiosError_default("Network Error", AxiosError_default.ERR_NETWORK, config, request));
+    request.onerror = function handleError(event) {
+      const msg = event && event.message ? event.message : "Network Error";
+      const err = new AxiosError_default(msg, AxiosError_default.ERR_NETWORK, config, request);
+      err.event = event || null;
+      reject(err);
       request = null;
     };
     request.ontimeout = function handleTimeout() {
@@ -44606,9 +44703,16 @@ var trackStream = (stream4, chunkSize, onProgress, onFinish) => {
 };
 
 // node_modules/axios/lib/adapters/fetch.js
-var isFetchSupported = typeof fetch === "function" && typeof Request === "function" && typeof Response === "function";
-var isReadableStreamSupported = isFetchSupported && typeof ReadableStream === "function";
-var encodeText = isFetchSupported && (typeof TextEncoder === "function" ? /* @__PURE__ */ ((encoder) => (str) => encoder.encode(str))(new TextEncoder()) : async (str) => new Uint8Array(await new Response(str).arrayBuffer()));
+var DEFAULT_CHUNK_SIZE = 64 * 1024;
+var { isFunction: isFunction2 } = utils_default;
+var globalFetchAPI = (({ Request, Response }) => ({
+  Request,
+  Response
+}))(utils_default.global);
+var {
+  ReadableStream: ReadableStream2,
+  TextEncoder: TextEncoder2
+} = utils_default.global;
 var test = (fn, ...args) => {
   try {
     return !!fn(...args);
@@ -44616,164 +44720,204 @@ var test = (fn, ...args) => {
     return false;
   }
 };
-var supportsRequestStream = isReadableStreamSupported && test(() => {
-  let duplexAccessed = false;
-  const hasContentType = new Request(platform_default.origin, {
-    body: new ReadableStream(),
-    method: "POST",
-    get duplex() {
-      duplexAccessed = true;
-      return "half";
-    }
-  }).headers.has("Content-Type");
-  return duplexAccessed && !hasContentType;
-});
-var DEFAULT_CHUNK_SIZE = 64 * 1024;
-var supportsResponseStream = isReadableStreamSupported && test(() => utils_default.isReadableStream(new Response("").body));
-var resolvers = {
-  stream: supportsResponseStream && ((res) => res.body)
-};
-isFetchSupported && ((res) => {
-  ["text", "arrayBuffer", "blob", "formData", "stream"].forEach((type) => {
-    !resolvers[type] && (resolvers[type] = utils_default.isFunction(res[type]) ? (res2) => res2[type]() : (_, config) => {
-      throw new AxiosError_default(`Response type '${type}' is not supported`, AxiosError_default.ERR_NOT_SUPPORT, config);
-    });
-  });
-})(new Response());
-var getBodyLength = async (body) => {
-  if (body == null) {
-    return 0;
+var factory = (env) => {
+  env = utils_default.merge.call({
+    skipUndefined: true
+  }, globalFetchAPI, env);
+  const { fetch: envFetch, Request, Response } = env;
+  const isFetchSupported = envFetch ? isFunction2(envFetch) : typeof fetch === "function";
+  const isRequestSupported = isFunction2(Request);
+  const isResponseSupported = isFunction2(Response);
+  if (!isFetchSupported) {
+    return false;
   }
-  if (utils_default.isBlob(body)) {
-    return body.size;
-  }
-  if (utils_default.isSpecCompliantForm(body)) {
-    const _request = new Request(platform_default.origin, {
+  const isReadableStreamSupported = isFetchSupported && isFunction2(ReadableStream2);
+  const encodeText = isFetchSupported && (typeof TextEncoder2 === "function" ? /* @__PURE__ */ ((encoder) => (str) => encoder.encode(str))(new TextEncoder2()) : async (str) => new Uint8Array(await new Request(str).arrayBuffer()));
+  const supportsRequestStream = isRequestSupported && isReadableStreamSupported && test(() => {
+    let duplexAccessed = false;
+    const hasContentType = new Request(platform_default.origin, {
+      body: new ReadableStream2(),
       method: "POST",
-      body
-    });
-    return (await _request.arrayBuffer()).byteLength;
-  }
-  if (utils_default.isArrayBufferView(body) || utils_default.isArrayBuffer(body)) {
-    return body.byteLength;
-  }
-  if (utils_default.isURLSearchParams(body)) {
-    body = body + "";
-  }
-  if (utils_default.isString(body)) {
-    return (await encodeText(body)).byteLength;
-  }
-};
-var resolveBodyLength = async (headers, body) => {
-  const length = utils_default.toFiniteNumber(headers.getContentLength());
-  return length == null ? getBodyLength(body) : length;
-};
-var fetch_default = isFetchSupported && (async (config) => {
-  let {
-    url: url2,
-    method,
-    data,
-    signal,
-    cancelToken,
-    timeout,
-    onDownloadProgress,
-    onUploadProgress,
-    responseType,
-    headers,
-    withCredentials = "same-origin",
-    fetchOptions
-  } = resolveConfig_default(config);
-  responseType = responseType ? (responseType + "").toLowerCase() : "text";
-  let composedSignal = composeSignals_default([signal, cancelToken && cancelToken.toAbortSignal()], timeout);
-  let request;
-  const unsubscribe = composedSignal && composedSignal.unsubscribe && (() => {
-    composedSignal.unsubscribe();
+      get duplex() {
+        duplexAccessed = true;
+        return "half";
+      }
+    }).headers.has("Content-Type");
+    return duplexAccessed && !hasContentType;
   });
-  let requestContentLength;
-  try {
-    if (onUploadProgress && supportsRequestStream && method !== "get" && method !== "head" && (requestContentLength = await resolveBodyLength(headers, data)) !== 0) {
-      let _request = new Request(url2, {
-        method: "POST",
-        body: data,
-        duplex: "half"
-      });
-      let contentTypeHeader;
-      if (utils_default.isFormData(data) && (contentTypeHeader = _request.headers.get("content-type"))) {
-        headers.setContentType(contentTypeHeader);
-      }
-      if (_request.body) {
-        const [onProgress, flush] = progressEventDecorator(
-          requestContentLength,
-          progressEventReducer(asyncDecorator(onUploadProgress))
-        );
-        data = trackStream(_request.body, DEFAULT_CHUNK_SIZE, onProgress, flush);
-      }
-    }
-    if (!utils_default.isString(withCredentials)) {
-      withCredentials = withCredentials ? "include" : "omit";
-    }
-    const isCredentialsSupported = "credentials" in Request.prototype;
-    request = new Request(url2, {
-      ...fetchOptions,
-      signal: composedSignal,
-      method: method.toUpperCase(),
-      headers: headers.normalize().toJSON(),
-      body: data,
-      duplex: "half",
-      credentials: isCredentialsSupported ? withCredentials : void 0
-    });
-    let response = await fetch(request);
-    const isStreamResponse = supportsResponseStream && (responseType === "stream" || responseType === "response");
-    if (supportsResponseStream && (onDownloadProgress || isStreamResponse && unsubscribe)) {
-      const options = {};
-      ["status", "statusText", "headers"].forEach((prop) => {
-        options[prop] = response[prop];
-      });
-      const responseContentLength = utils_default.toFiniteNumber(response.headers.get("content-length"));
-      const [onProgress, flush] = onDownloadProgress && progressEventDecorator(
-        responseContentLength,
-        progressEventReducer(asyncDecorator(onDownloadProgress), true)
-      ) || [];
-      response = new Response(
-        trackStream(response.body, DEFAULT_CHUNK_SIZE, onProgress, () => {
-          flush && flush();
-          unsubscribe && unsubscribe();
-        }),
-        options
-      );
-    }
-    responseType = responseType || "text";
-    let responseData = await resolvers[utils_default.findKey(resolvers, responseType) || "text"](response, config);
-    !isStreamResponse && unsubscribe && unsubscribe();
-    return await new Promise((resolve, reject) => {
-      settle(resolve, reject, {
-        data: responseData,
-        headers: AxiosHeaders_default.from(response.headers),
-        status: response.status,
-        statusText: response.statusText,
-        config,
-        request
-      });
-    });
-  } catch (err) {
-    unsubscribe && unsubscribe();
-    if (err && err.name === "TypeError" && /Load failed|fetch/i.test(err.message)) {
-      throw Object.assign(
-        new AxiosError_default("Network Error", AxiosError_default.ERR_NETWORK, config, request),
-        {
-          cause: err.cause || err
+  const supportsResponseStream = isResponseSupported && isReadableStreamSupported && test(() => utils_default.isReadableStream(new Response("").body));
+  const resolvers = {
+    stream: supportsResponseStream && ((res) => res.body)
+  };
+  isFetchSupported && (() => {
+    ["text", "arrayBuffer", "blob", "formData", "stream"].forEach((type) => {
+      !resolvers[type] && (resolvers[type] = (res, config) => {
+        let method = res && res[type];
+        if (method) {
+          return method.call(res);
         }
-      );
+        throw new AxiosError_default(`Response type '${type}' is not supported`, AxiosError_default.ERR_NOT_SUPPORT, config);
+      });
+    });
+  })();
+  const getBodyLength = async (body) => {
+    if (body == null) {
+      return 0;
     }
-    throw AxiosError_default.from(err, err && err.code, config, request);
+    if (utils_default.isBlob(body)) {
+      return body.size;
+    }
+    if (utils_default.isSpecCompliantForm(body)) {
+      const _request = new Request(platform_default.origin, {
+        method: "POST",
+        body
+      });
+      return (await _request.arrayBuffer()).byteLength;
+    }
+    if (utils_default.isArrayBufferView(body) || utils_default.isArrayBuffer(body)) {
+      return body.byteLength;
+    }
+    if (utils_default.isURLSearchParams(body)) {
+      body = body + "";
+    }
+    if (utils_default.isString(body)) {
+      return (await encodeText(body)).byteLength;
+    }
+  };
+  const resolveBodyLength = async (headers, body) => {
+    const length = utils_default.toFiniteNumber(headers.getContentLength());
+    return length == null ? getBodyLength(body) : length;
+  };
+  return async (config) => {
+    let {
+      url: url2,
+      method,
+      data,
+      signal,
+      cancelToken,
+      timeout,
+      onDownloadProgress,
+      onUploadProgress,
+      responseType,
+      headers,
+      withCredentials = "same-origin",
+      fetchOptions
+    } = resolveConfig_default(config);
+    let _fetch = envFetch || fetch;
+    responseType = responseType ? (responseType + "").toLowerCase() : "text";
+    let composedSignal = composeSignals_default([signal, cancelToken && cancelToken.toAbortSignal()], timeout);
+    let request = null;
+    const unsubscribe = composedSignal && composedSignal.unsubscribe && (() => {
+      composedSignal.unsubscribe();
+    });
+    let requestContentLength;
+    try {
+      if (onUploadProgress && supportsRequestStream && method !== "get" && method !== "head" && (requestContentLength = await resolveBodyLength(headers, data)) !== 0) {
+        let _request = new Request(url2, {
+          method: "POST",
+          body: data,
+          duplex: "half"
+        });
+        let contentTypeHeader;
+        if (utils_default.isFormData(data) && (contentTypeHeader = _request.headers.get("content-type"))) {
+          headers.setContentType(contentTypeHeader);
+        }
+        if (_request.body) {
+          const [onProgress, flush] = progressEventDecorator(
+            requestContentLength,
+            progressEventReducer(asyncDecorator(onUploadProgress))
+          );
+          data = trackStream(_request.body, DEFAULT_CHUNK_SIZE, onProgress, flush);
+        }
+      }
+      if (!utils_default.isString(withCredentials)) {
+        withCredentials = withCredentials ? "include" : "omit";
+      }
+      const isCredentialsSupported = isRequestSupported && "credentials" in Request.prototype;
+      const resolvedOptions = {
+        ...fetchOptions,
+        signal: composedSignal,
+        method: method.toUpperCase(),
+        headers: headers.normalize().toJSON(),
+        body: data,
+        duplex: "half",
+        credentials: isCredentialsSupported ? withCredentials : void 0
+      };
+      request = isRequestSupported && new Request(url2, resolvedOptions);
+      let response = await (isRequestSupported ? _fetch(request, fetchOptions) : _fetch(url2, resolvedOptions));
+      const isStreamResponse = supportsResponseStream && (responseType === "stream" || responseType === "response");
+      if (supportsResponseStream && (onDownloadProgress || isStreamResponse && unsubscribe)) {
+        const options = {};
+        ["status", "statusText", "headers"].forEach((prop) => {
+          options[prop] = response[prop];
+        });
+        const responseContentLength = utils_default.toFiniteNumber(response.headers.get("content-length"));
+        const [onProgress, flush] = onDownloadProgress && progressEventDecorator(
+          responseContentLength,
+          progressEventReducer(asyncDecorator(onDownloadProgress), true)
+        ) || [];
+        response = new Response(
+          trackStream(response.body, DEFAULT_CHUNK_SIZE, onProgress, () => {
+            flush && flush();
+            unsubscribe && unsubscribe();
+          }),
+          options
+        );
+      }
+      responseType = responseType || "text";
+      let responseData = await resolvers[utils_default.findKey(resolvers, responseType) || "text"](response, config);
+      !isStreamResponse && unsubscribe && unsubscribe();
+      return await new Promise((resolve, reject) => {
+        settle(resolve, reject, {
+          data: responseData,
+          headers: AxiosHeaders_default.from(response.headers),
+          status: response.status,
+          statusText: response.statusText,
+          config,
+          request
+        });
+      });
+    } catch (err) {
+      unsubscribe && unsubscribe();
+      if (err && err.name === "TypeError" && /Load failed|fetch/i.test(err.message)) {
+        throw Object.assign(
+          new AxiosError_default("Network Error", AxiosError_default.ERR_NETWORK, config, request),
+          {
+            cause: err.cause || err
+          }
+        );
+      }
+      throw AxiosError_default.from(err, err && err.code, config, request);
+    }
+  };
+};
+var seedCache = /* @__PURE__ */ new Map();
+var getFetch = (config) => {
+  let env = config ? config.env : {};
+  const { fetch: fetch2, Request, Response } = env;
+  const seeds = [
+    Request,
+    Response,
+    fetch2
+  ];
+  let len = seeds.length, i = len, seed, target, map = seedCache;
+  while (i--) {
+    seed = seeds[i];
+    target = map.get(seed);
+    target === void 0 && map.set(seed, target = i ? /* @__PURE__ */ new Map() : factory(env));
+    map = target;
   }
-});
+  return target;
+};
+var adapter = getFetch();
 
 // node_modules/axios/lib/adapters/adapters.js
 var knownAdapters = {
   http: http_default,
   xhr: xhr_default,
-  fetch: fetch_default
+  fetch: {
+    get: getFetch
+  }
 };
 utils_default.forEach(knownAdapters, (fn, value) => {
   if (fn) {
@@ -44785,30 +44929,30 @@ utils_default.forEach(knownAdapters, (fn, value) => {
   }
 });
 var renderReason = (reason) => `- ${reason}`;
-var isResolvedHandle = (adapter) => utils_default.isFunction(adapter) || adapter === null || adapter === false;
+var isResolvedHandle = (adapter2) => utils_default.isFunction(adapter2) || adapter2 === null || adapter2 === false;
 var adapters_default = {
-  getAdapter: (adapters) => {
+  getAdapter: (adapters, config) => {
     adapters = utils_default.isArray(adapters) ? adapters : [adapters];
     const { length } = adapters;
     let nameOrAdapter;
-    let adapter;
+    let adapter2;
     const rejectedReasons = {};
     for (let i = 0; i < length; i++) {
       nameOrAdapter = adapters[i];
       let id;
-      adapter = nameOrAdapter;
+      adapter2 = nameOrAdapter;
       if (!isResolvedHandle(nameOrAdapter)) {
-        adapter = knownAdapters[(id = String(nameOrAdapter)).toLowerCase()];
-        if (adapter === void 0) {
+        adapter2 = knownAdapters[(id = String(nameOrAdapter)).toLowerCase()];
+        if (adapter2 === void 0) {
           throw new AxiosError_default(`Unknown adapter '${id}'`);
         }
       }
-      if (adapter) {
+      if (adapter2 && (utils_default.isFunction(adapter2) || (adapter2 = adapter2.get(config)))) {
         break;
       }
-      rejectedReasons[id || "#" + i] = adapter;
+      rejectedReasons[id || "#" + i] = adapter2;
     }
-    if (!adapter) {
+    if (!adapter2) {
       const reasons = Object.entries(rejectedReasons).map(
         ([id, state]) => `adapter ${id} ` + (state === false ? "is not supported by the environment" : "is not available in the build")
       );
@@ -44818,7 +44962,7 @@ var adapters_default = {
         "ERR_NOT_SUPPORT"
       );
     }
-    return adapter;
+    return adapter2;
   },
   adapters: knownAdapters
 };
@@ -44842,8 +44986,8 @@ function dispatchRequest(config) {
   if (["post", "put", "patch"].indexOf(config.method) !== -1) {
     config.headers.setContentType("application/x-www-form-urlencoded", false);
   }
-  const adapter = adapters_default.getAdapter(config.adapter || defaults_default.adapter);
-  return adapter(config).then(function onAdapterResolution(response) {
+  const adapter2 = adapters_default.getAdapter(config.adapter || defaults_default.adapter, config);
+  return adapter2(config).then(function onAdapterResolution(response) {
     throwIfCancellationRequested(config);
     response.data = transformData.call(
       config,
@@ -45038,8 +45182,8 @@ var Axios = class {
     let len;
     if (!synchronousRequestInterceptors) {
       const chain = [dispatchRequest.bind(this), void 0];
-      chain.unshift.apply(chain, requestInterceptorChain);
-      chain.push.apply(chain, responseInterceptorChain);
+      chain.unshift(...requestInterceptorChain);
+      chain.push(...responseInterceptorChain);
       len = chain.length;
       promise = Promise.resolve(config);
       while (i < len) {
@@ -45049,7 +45193,6 @@ var Axios = class {
     }
     len = requestInterceptorChain.length;
     let newConfig = config;
-    i = 0;
     while (i < len) {
       const onFulfilled = requestInterceptorChain[i++];
       const onRejected = requestInterceptorChain[i++];
