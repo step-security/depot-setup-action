@@ -4,9 +4,9 @@ on:
   workflow_dispatch:
     inputs:
       tag:
-        description: "Tag for the release"
+        description: 'Tag for the release'
         required: true
-        
+
 permissions:
   contents: read
 
@@ -19,4 +19,4 @@ jobs:
 
     uses: step-security/reusable-workflows/.github/workflows/actions_release.yaml@v1
     with:
-      tag: "${{ github.event.inputs.tag }}"
+      tag: '${{ github.event.inputs.tag }}'

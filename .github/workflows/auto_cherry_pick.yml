@@ -4,13 +4,13 @@ on:
   workflow_dispatch:
     inputs:
       base_branch:
-        description: "Base branch to create the PR against"
+        description: 'Base branch to create the PR against'
         required: true
-        default: "main"
+        default: 'main'
       mode:
-        description: "Run mode: cherry-pick or verify"
+        description: 'Run mode: cherry-pick or verify'
         required: false
-        default: "cherry-pick"
+        default: 'cherry-pick'
 
   pull_request:
     types: [opened, synchronize, labeled]
@@ -26,7 +26,7 @@ jobs:
     if: github.event_name == 'workflow_dispatch' || contains(fromJson(toJson(github.event.pull_request.labels)).*.name, 'review-required')
     uses: step-security/reusable-workflows/.github/workflows/auto_cherry_pick.yaml@v1
     with:
-      original-owner: "depot"
-      repo-name: "setup-action"
+      original-owner: 'depot'
+      repo-name: 'setup-action'
       base_branch: ${{ inputs.base_branch }}
       mode: ${{ github.event_name == 'pull_request' && 'verify' || inputs.mode }}

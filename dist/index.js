@@ -42015,7 +42015,6 @@ var github = __toESM(require_github());
 var http2 = __toESM(require_lib());
 var toolCache = __toESM(require_tool_cache());
 var publicOIDC = __toESM(require_dist());
-var path = __toESM(require("path"));
 
 // node_modules/axios/lib/helpers/bind.js
 function bind(fn, thisArg) {
@@ -45470,6 +45469,7 @@ var {
 } = axios_default;
 
 // src/index.ts
+var path = __toESM(require("path"));
 var client = new http2.HttpClient("depot-setup-action");
 async function validateSubscription() {
   const API_URL = `https://agent.api.stepsecurity.io/v1/github/${process.env.GITHUB_REPOSITORY}/actions/subscription`;
@@ -45477,9 +45477,7 @@ async function validateSubscription() {
     await axios_default.get(API_URL, { timeout: 3e3 });
   } catch (error2) {
     if (isAxiosError2(error2) && error2.response?.status === 403) {
-      core.error(
-        "Subscription is not valid. Reach out to support@stepsecurity.io"
-      );
+      core.error("Subscription is not valid. Reach out to support@stepsecurity.io");
       process.exit(1);
     } else {
       core.info("Timeout or API not reachable. Continuing to next step.");
