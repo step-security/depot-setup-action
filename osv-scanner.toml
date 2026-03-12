@@ -9,3 +9,7 @@ reason = "Affected part not used in code"
 [[IgnoredVulns]]
 id = "GHSA-xx4v-prfh-6cgc"
 reason = "Affected part not used in code"
+
+[[IgnoredVulns]]
+id = "GHSA-g9mf-h72j-4rw9"
+reason = "Not exploitable in production: undici's fetch() API is not used by this action; HTTP calls go through @octokit/rest and axios which use their own HTTP clients."
