@@ -1,3 +1,5 @@
+[![StepSecurity Maintained Action](https://raw.githubusercontent.com/step-security/maintained-actions-assets/main/assets/maintained-action-banner.png)](https://docs.stepsecurity.io/actions/stepsecurity-maintained-actions)
+
 # Depot `setup-action` GitHub Action
 
 Provides the [Depot CLI](https://github.com/depot/cli) in the GitHub Actions environment, allowing access to the `depot` binary in subsequent workflow steps.
