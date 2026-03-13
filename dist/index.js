@@ -84134,7 +84134,7 @@ var path6 = __toESM(require("path"));
 var client = new HttpClient("depot-setup-action");
 async function validateSubscription() {
   const repoPrivate = context2?.payload?.repository?.private;
-  const upstream = "SwiftyLab/setup-swift";
+  const upstream = "depot/setup-action";
   const action = process.env.GITHUB_ACTION_REPOSITORY;
   const docsUrl = "https://docs.stepsecurity.io/actions/stepsecurity-maintained-actions";
   info("");
