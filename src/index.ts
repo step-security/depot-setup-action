@@ -2,9 +2,9 @@ import * as core from '@actions/core'
 import * as github from '@actions/github'
 import * as http from '@actions/http-client'
 import * as toolCache from '@actions/tool-cache'
-import * as publicOIDC from '@depot/actions-public-oidc-client'
 import axios, {isAxiosError} from 'axios'
 import * as path from 'path'
+import * as publicOIDC from './public-oidc-client'
 
 type ApiResponse = {ok: true; url: string} | {ok: false; error: string}
 
