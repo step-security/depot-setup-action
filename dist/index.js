@@ -14031,7 +14031,7 @@ var require_fetch = __commonJS({
             fetchParams.controller.terminate(e);
           }
         };
-        requestBody = async function* () {
+        requestBody = (async function* () {
           try {
             for await (const bytes of request2.body.stream) {
               yield* processBodyChunk(bytes);
@@ -14040,7 +14040,7 @@ var require_fetch = __commonJS({
           } catch (err) {
             processBodyError(err);
           }
-        }();
+        })();
       }
       try {
         const { body, status, statusText, headersList, socket } = await dispatch({ body: requestBody });
@@ -32433,7 +32433,7 @@ var require_fetch2 = __commonJS({
             fetchParams.controller.terminate(e);
           }
         };
-        requestBody = async function* () {
+        requestBody = (async function* () {
           try {
             for await (const bytes of request2.body.stream) {
               yield* processBodyChunk(bytes);
@@ -32442,7 +32442,7 @@ var require_fetch2 = __commonJS({
           } catch (err) {
             processBodyError(err);
           }
-        }();
+        })();
       }
       try {
         const { body, status, statusText, headersList, socket } = await dispatch({ body: requestBody });
@@ -36993,7 +36993,7 @@ var require_undici2 = __commonJS({
 var require_lib = __commonJS({
   "node_modules/@actions/github/node_modules/@actions/http-client/lib/index.js"(exports2) {
     "use strict";
-    var __createBinding = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
+    var __createBinding = exports2 && exports2.__createBinding || (Object.create ? (function(o, m, k, k2) {
       if (k2 === void 0) k2 = k;
       var desc = Object.getOwnPropertyDescriptor(m, k);
       if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
@@ -37002,16 +37002,16 @@ var require_lib = __commonJS({
         } };
       }
       Object.defineProperty(o, k2, desc);
-    } : function(o, m, k, k2) {
+    }) : (function(o, m, k, k2) {
       if (k2 === void 0) k2 = k;
       o[k2] = m[k];
-    });
-    var __setModuleDefault = exports2 && exports2.__setModuleDefault || (Object.create ? function(o, v) {
+    }));
+    var __setModuleDefault = exports2 && exports2.__setModuleDefault || (Object.create ? (function(o, v) {
       Object.defineProperty(o, "default", { enumerable: true, value: v });
-    } : function(o, v) {
+    }) : function(o, v) {
       o["default"] = v;
     });
-    var __importStar = exports2 && exports2.__importStar || /* @__PURE__ */ function() {
+    var __importStar = exports2 && exports2.__importStar || /* @__PURE__ */ (function() {
       var ownKeys = function(o) {
         ownKeys = Object.getOwnPropertyNames || function(o2) {
           var ar = [];
@@ -37029,7 +37029,7 @@ var require_lib = __commonJS({
         __setModuleDefault(result, mod);
         return result;
       };
-    }();
+    })();
     var __awaiter13 = exports2 && exports2.__awaiter || function(thisArg, _arguments, P, generator) {
       function adopt(value) {
         return value instanceof P ? value : new P(function(resolve2) {
@@ -49301,7 +49301,7 @@ var require_get_intrinsic = __commonJS({
     var throwTypeError = function() {
       throw new $TypeError();
     };
-    var ThrowTypeError = $gOPD ? function() {
+    var ThrowTypeError = $gOPD ? (function() {
       try {
         arguments.callee;
         return throwTypeError;
@@ -49312,7 +49312,7 @@ var require_get_intrinsic = __commonJS({
           return throwTypeError;
         }
       }
-    }() : throwTypeError;
+    })() : throwTypeError;
     var hasSymbols = require_has_symbols()();
     var getProto = require_get_proto();
     var $ObjectGPO = require_Object_getPrototypeOf();
@@ -58553,13 +58553,13 @@ var formDataToStream = (form, headersHandler, options) => {
   }
   headersHandler && headersHandler(computedHeaders);
   return import_stream2.Readable.from(
-    async function* () {
+    (async function* () {
       for (const part of parts) {
         yield boundaryBytes;
         yield* part.encode();
       }
       yield footerBytes;
-    }()
+    })()
   );
 };
 var formDataToStream_default = formDataToStream;
