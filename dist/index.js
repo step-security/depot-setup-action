@@ -44821,6 +44821,10 @@ async function run() {
       }
     }
   }
+  if (getBooleanInput("configure-docker")) {
+    info("Configuring Docker to use Depot");
+    await exec("depot", ["configure-docker"]);
+  }
 }
 async function resolveVersion(version) {
   const res = await client2.get(`https://dl.depot.dev/cli/release/${process.platform}/${process.arch}/${version}`);
